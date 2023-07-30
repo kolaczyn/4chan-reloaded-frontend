@@ -47,12 +47,17 @@ const HomePage = () => {
           </li>
         ))}
       </ul>
-      <h2>Create new board</h2>
-      <Form method="POST">
-        <input name="slug" ref={slugInputRef} />
-        <input name="name" ref={nameInputRef} />
-        <button type="submit">Submit</button>
-      </Form>
+      <details>
+        <summary>Create new board</summary>
+        <Form method="POST">
+          <label htmlFor="slug-input">Slug</label>
+          <input id="slug-input" name="slug" ref={slugInputRef} />
+          <br />
+          <label htmlFor="name-input">Name</label>
+          <input id="name-input" name="name" ref={nameInputRef} />
+          <button type="submit">Submit</button>
+        </Form>
+      </details>
     </div>
   );
 };
