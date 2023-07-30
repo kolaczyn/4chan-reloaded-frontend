@@ -37,15 +37,18 @@ const ThreadPage = () => {
   return (
     <div>
       <a href={`/boards/${boardSlug}`}>Back</a>
-      <Form method="post">
-        <input name="message" ref={inputRef} />
-        <button type="submit">Reply</button>
-      </Form>
+
       <ul>
         {data.replies.map((x, idx) => (
           <li key={idx}>{x.message}</li>
         ))}
       </ul>
+      <hr />
+
+      <Form method="post">
+        <input name="message" ref={inputRef} />
+        <button type="submit">Reply</button>
+      </Form>
     </div>
   );
 };

@@ -33,17 +33,17 @@ const BoardPage = () => {
 
   return (
     <>
-      <h1>
+      <h1
+        style={{
+          display: "inline-block",
+          marginRight: "1rem",
+          marginBottom: "1rem",
+        }}
+      >
         /{data.slug}/ - {data.name}
       </h1>
       <a href="/">Back</a>
-      <div>
-        <Form method="POST">
-          <input ref={inputRef} name="message" />
-          <br />
-          <button type="submit">Start a new thread</button>
-        </Form>
-      </div>
+
       {!!data.threads.length && (
         <div>
           <h2>Threads:</h2>
@@ -58,6 +58,15 @@ const BoardPage = () => {
           </ul>
         </div>
       )}
+
+      <div>
+        <h2>Start a new thread</h2>
+        <Form method="POST">
+          <input ref={inputRef} name="message" />
+          <br />
+          <button type="submit">Send</button>
+        </Form>
+      </div>
     </>
   );
 };
