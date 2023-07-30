@@ -1,6 +1,6 @@
 import { API_URL } from "~/constants";
 import type { ActionArgs, DataFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import type { BoardsThreadsDto } from "~/types";
 import { useRef } from "react";
 
@@ -30,6 +30,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 const BoardPage = () => {
   const data = useLoaderData<typeof loader>();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -64,7 +65,9 @@ const BoardPage = () => {
         <Form method="POST">
           <input ref={inputRef} name="message" />
           <br />
-          <button type="submit">Send</button>
+          <button disabled={navigation.state === "submitting"} type="submit">
+            Send
+          </button>
         </Form>
       </div>
     </>

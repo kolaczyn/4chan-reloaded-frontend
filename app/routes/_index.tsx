@@ -1,6 +1,6 @@
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import type { BoardsListDto } from "~/types";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { json } from "@remix-run/node";
 import { useRef } from "react";
 import { API_URL } from "~/constants";
@@ -37,6 +37,8 @@ const HomePage = () => {
   const slugInputRef = useRef<HTMLInputElement | null>(null);
   const nameInputRef = useRef<HTMLInputElement | null>(null);
 
+  const navigation = useNavigation();
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Boards</h1>
@@ -55,7 +57,9 @@ const HomePage = () => {
           <br />
           <label htmlFor="name-input">Name</label>
           <input id="name-input" name="name" ref={nameInputRef} />
-          <button type="submit">Submit</button>
+          <button disabled={navigation.state === "submitting"} type="submit">
+            Submit
+          </button>
         </Form>
       </details>
     </div>

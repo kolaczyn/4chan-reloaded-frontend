@@ -1,7 +1,7 @@
 import type { DataFunctionArgs } from "@remix-run/node";
 import type { ThreadDto } from "~/types";
 import { API_URL } from "~/constants";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { ActionArgs } from "@remix-run/node";
 import { useRef } from "react";
 
@@ -34,6 +34,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 const ThreadPage = () => {
   const { data, boardSlug } = useLoaderData<typeof loader>();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const navigation = useNavigation();
   return (
     <div>
       <a href={`/boards/${boardSlug}`}>Back</a>
@@ -47,7 +48,9 @@ const ThreadPage = () => {
 
       <Form method="post">
         <input name="message" ref={inputRef} />
-        <button type="submit">Reply</button>
+        <button type="submit" disabled={navigation.state === "submitting"}>
+          Reply
+        </button>
       </Form>
     </div>
   );
