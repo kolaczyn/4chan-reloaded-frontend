@@ -62,6 +62,7 @@ const HomePage = () => {
           </button>
         </Form>
       </details>
+      <a href="/changelog">See changelog</a>
     </div>
   );
 };
