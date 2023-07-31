@@ -10,7 +10,11 @@ export type BoardsThreadsDto = {
     id: number;
     message: string;
     repliesCount: number;
+    createdAt: string | null;
   }[];
 };
 
-export type ThreadDto = { id: number; replies: { message: string }[] };
+export type ThreadDto = {
+  id: number;
+  replies: { message: string; createdAt: string | null }[];
+};

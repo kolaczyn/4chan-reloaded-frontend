@@ -3,6 +3,7 @@ import type { ActionArgs, DataFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import type { BoardsThreadsDto } from "~/types";
 import { useRef } from "react";
+import { formatDate } from "~/utils/formatDate";
 
 export const loader = async ({ params }: DataFunctionArgs) => {
   const boardSlug = params.boardSlug;
@@ -54,6 +55,11 @@ const BoardPage = () => {
                 <a href={`/boards/${data.slug}/${x.id}`}>
                   {x.message} ({x.repliesCount})
                 </a>
+                {x.createdAt && (
+                  <span style={{ marginLeft: ".5rem" }}>
+                    / created at: {formatDate(x.createdAt)}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

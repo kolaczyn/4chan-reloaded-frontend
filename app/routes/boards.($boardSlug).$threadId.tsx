@@ -1,9 +1,9 @@
-import type { DataFunctionArgs } from "@remix-run/node";
+import type { ActionArgs, DataFunctionArgs } from "@remix-run/node";
 import type { ThreadDto } from "~/types";
 import { API_URL } from "~/constants";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
-import { ActionArgs } from "@remix-run/node";
 import { useRef } from "react";
+import { formatDate } from "~/utils/formatDate";
 
 export const loader = async ({ params }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -41,7 +41,14 @@ const ThreadPage = () => {
 
       <ul>
         {data.replies.map((x, idx) => (
-          <li key={idx}>{x.message}</li>
+          <li key={idx}>
+            <span>{x.message}</span>
+            {x.createdAt && (
+              <span style={{ marginLeft: ".5rem", color: "rebeccapurple" }}>
+                / created at: {formatDate(x.createdAt)}
+              </span>
+            )}
+          </li>
         ))}
       </ul>
       <hr />
