@@ -58,7 +58,14 @@ const ThreadPage = () => {
       <ul>
         {data.replies.map((x, idx) => (
           <li key={idx}>
-            <span>{x.message}</span>
+            <span
+              style={{
+                //   greentext
+                color: x.message.startsWith(">") ? "#789922" : "initial",
+              }}
+            >
+              {x.message}
+            </span>
             {x.createdAt && (
               <span style={{ marginLeft: ".5rem", color: "rebeccapurple" }}>
                 / created at: {formatDate(x.createdAt)}
