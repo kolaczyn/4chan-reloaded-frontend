@@ -36,7 +36,7 @@ const HomePage = () => {
 
       <a href="/changelog">See changelog</a>
       <br />
-      {isJanny && <a href="/admin">Go to panel</a>}
+      {isJanny && <a href="/janny">Go to panel</a>}
     </div>
   );
 };
