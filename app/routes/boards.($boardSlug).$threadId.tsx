@@ -5,7 +5,13 @@ import type {
 } from "@remix-run/node";
 import type { ThreadDto } from "~/types";
 import { API_URL } from "~/constants";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useNavigation,
+  useParams,
+  useRevalidator,
+} from "@remix-run/react";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
@@ -19,7 +25,7 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
   return { data: res, boardSlug, isJanny };
 };
 
-export const action = async ({ request, params }: ActionArgs) => {
+const addReplyAction = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message");
 
@@ -37,6 +43,31 @@ export const action = async ({ request, params }: ActionArgs) => {
   return res;
 };
 
+const deleteReplyAction = async (
+  boardSlug: string,
+  threadId: string,
+  replyId: number,
+  password: string
+) => {
+  const res = await fetch(
+    `${API_URL}/${boardSlug}/threads/${threadId}/replies/${replyId}`,
+    {
+      method: "delete",
+      body: JSON.stringify({ password }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    }
+  );
+  return res;
+};
+
+export const action = async ({ request, params, context }: ActionArgs) => {
+  if (request.method === "POST") {
+    return await addReplyAction({ request, params, context });
+  }
+};
+
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   const firstReply = data?.data.replies?.[0].message;
   return [
@@ -48,16 +79,29 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 };
 
 const ThreadPage = () => {
+  const params = useParams();
+  const revalidator = useRevalidator();
   const { data, boardSlug, isJanny } = useLoaderData<typeof loader>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const handleDelete = async (id: number) => {
+    await deleteReplyAction(
+      boardSlug ?? "",
+      params.threadId ?? "-1",
+      id,
+      passwordRef.current?.value ?? ""
+    );
+    revalidator.revalidate();
+  };
+
   return (
     <div>
       <a href={`/boards/${boardSlug}`}>Back</a>
 
       <ul>
-        {data.replies.map((x, idx) => (
-          <li key={idx}>
+        {data.replies.map((x) => (
+          <li key={x.id}>
             <span
               style={{
                 //   greentext
@@ -71,14 +115,22 @@ const ThreadPage = () => {
                 / created at: {formatDate(x.createdAt)}
               </span>
             )}
-            {isJanny && <button disabled>Remove</button>}
+            {isJanny && (
+              <button onClick={() => handleDelete(x.id)}>Remove</button>
+            )}
           </li>
         ))}
       </ul>
       <hr />
-
+      {isJanny && (
+        <>
+          <input ref={passwordRef} id="password" type="password" />
+          <label htmlFor="password">Password</label>
+        </>
+      )}
+      <br />
       <Form method="post">
-        <input name="message" ref={inputRef} />
+        <input name="message" />
         <button type="submit" disabled={navigation.state === "submitting"}>
           Reply
         </button>
