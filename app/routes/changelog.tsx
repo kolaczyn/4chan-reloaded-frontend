@@ -1,15 +1,21 @@
 type ChangelogItem = {
-  version: string;
-  date: string;
+  version: `${number}.${number}.${number}`;
+  date: `${number}.${number}.${number}`;
   changes: string;
 };
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.4",
+    date: "01.08.2023",
+    changes: "creating boards no longer public",
+  },
+  {
     version: "0.0.3",
     date: "01.08.2023",
     changes: "added pagination for threads of a board",
   },
+  // I missed 0.0.2, but whatever :p
   {
     version: "0.0.1",
     date: "31.07.2023",
