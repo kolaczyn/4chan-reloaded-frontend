@@ -27,8 +27,8 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export const meta: V2_MetaFunction = () => [
-  { title: "New Remix App" },
-  { name: "description", content: "Welcome to Remix!" },
+  { title: "Boards" },
+  { name: "description", content: "A simple messageboard" },
 ];
 
 const HomePage = () => {

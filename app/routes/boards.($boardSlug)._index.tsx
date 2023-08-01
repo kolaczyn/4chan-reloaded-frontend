@@ -1,5 +1,9 @@
 import { API_URL } from "~/constants";
-import type { ActionArgs, DataFunctionArgs } from "@remix-run/node";
+import type {
+  ActionArgs,
+  DataFunctionArgs,
+  V2_MetaFunction,
+} from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import type { BoardsThreadsDto } from "~/types";
 import { useRef } from "react";
@@ -27,6 +31,10 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   return res;
 };
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  { title: data ? `/${data.slug}/ - ${data.name}` : "" },
+];
 
 const BoardPage = () => {
   const data = useLoaderData<typeof loader>();

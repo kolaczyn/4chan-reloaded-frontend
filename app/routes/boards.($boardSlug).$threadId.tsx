@@ -1,4 +1,8 @@
-import type { ActionArgs, DataFunctionArgs } from "@remix-run/node";
+import type {
+  ActionArgs,
+  DataFunctionArgs,
+  V2_MetaFunction,
+} from "@remix-run/node";
 import type { ThreadDto } from "~/types";
 import { API_URL } from "~/constants";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
@@ -29,6 +33,16 @@ export const action = async ({ request, params }: ActionArgs) => {
   ).then((res) => res.json());
 
   return res;
+};
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  const firstReply = data?.data.replies?.[0].message;
+  return [
+    {
+      title: data ? `${firstReply ?? ""} - /${data.boardSlug}/` : "",
+    },
+    { name: "description", content: "A simple messageboard" },
+  ];
 };
 
 const ThreadPage = () => {
