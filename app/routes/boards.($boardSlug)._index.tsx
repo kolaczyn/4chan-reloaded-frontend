@@ -4,16 +4,28 @@ import type {
   DataFunctionArgs,
   V2_MetaFunction,
 } from "@remix-run/node";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useNavigation,
+  useSearchParams,
+} from "@remix-run/react";
 import type { BoardsThreadsDto } from "~/types";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
 
-export const loader = async ({ params }: DataFunctionArgs) => {
+const PAGE_SIZE = 6;
+
+export const loader = async ({
+  params,
+  request,
+  context,
+}: DataFunctionArgs) => {
   const boardSlug = params.boardSlug;
-  const res: BoardsThreadsDto = await fetch(`${API_URL}/${boardSlug}`).then(
-    (res) => res.json()
-  );
+  const page = new URL(request.url).searchParams.get("page") ?? "1";
+  const res: BoardsThreadsDto = await fetch(
+    `${API_URL}/${boardSlug}?page=${page}&pageSize=${PAGE_SIZE}`
+  ).then((res) => res.json());
   return res;
 };
 
@@ -37,9 +49,15 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
 ];
 
 const BoardPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData<typeof loader>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
+
+  const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
+
+  const isFirstPage = currentPage === 1;
+  const isLastPage = data.threads.length < PAGE_SIZE;
 
   return (
     <>
@@ -55,7 +73,7 @@ const BoardPage = () => {
       <a href="/">Back</a>
 
       {!!data.threads.length && (
-        <div>
+        <>
           <h2>Threads:</h2>
           <ul>
             {data.threads.map((x) => (
@@ -71,7 +89,27 @@ const BoardPage = () => {
               </li>
             ))}
           </ul>
-        </div>
+          <button
+            disabled={isFirstPage}
+            onClick={() =>
+              setSearchParams(
+                new URLSearchParams({ page: `${currentPage - 1}` })
+              )
+            }
+          >
+            previous page
+          </button>
+          <button
+            disabled={isLastPage}
+            onClick={() =>
+              setSearchParams(
+                new URLSearchParams({ page: `${currentPage + 1}` })
+              )
+            }
+          >
+            next page
+          </button>
+        </>
       )}
 
       <div>
