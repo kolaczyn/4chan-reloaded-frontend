@@ -13,20 +13,18 @@ import {
 import type { BoardsThreadsDto } from "~/types";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
+import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 
 const PAGE_SIZE = 6;
 
-export const loader = async ({
-  params,
-  request,
-  context,
-}: DataFunctionArgs) => {
+export const loader = async ({ params, request }: DataFunctionArgs) => {
   const boardSlug = params.boardSlug;
   const page = new URL(request.url).searchParams.get("page") ?? "1";
+  const isJanny = await getIsJannyFromCookie(request);
   const res: BoardsThreadsDto = await fetch(
     `${API_URL}/${boardSlug}?page=${page}&pageSize=${PAGE_SIZE}`
   ).then((res) => res.json());
-  return res;
+  return { isJanny, boardsThreads: res };
 };
 
 export const action = async ({ request, params }: ActionArgs) => {
@@ -44,13 +42,18 @@ export const action = async ({ request, params }: ActionArgs) => {
   return res;
 };
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
-  { title: data ? `/${data.slug}/ - ${data.name}` : "" },
-];
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  const x = data?.boardsThreads;
+  return [
+    {
+      title: x ? `/${x.slug}/ - ${x.name}` : "",
+    },
+  ];
+};
 
 const BoardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const data = useLoaderData<typeof loader>();
+  const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
 
@@ -86,6 +89,7 @@ const BoardPage = () => {
                     / created at: {formatDate(x.createdAt)}
                   </span>
                 )}
+                {isJanny && <button disabled>Delete</button>}
               </li>
             ))}
           </ul>

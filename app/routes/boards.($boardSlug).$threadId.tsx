@@ -8,13 +8,15 @@ import { API_URL } from "~/constants";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
+import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 
-export const loader = async ({ params }: DataFunctionArgs) => {
+export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
+  const isJanny = await getIsJannyFromCookie(request);
   const res: ThreadDto = await fetch(
     `${API_URL}/${boardSlug}/threads/${threadId}`
   ).then((res) => res.json());
-  return { data: res, boardSlug };
+  return { data: res, boardSlug, isJanny };
 };
 
 export const action = async ({ request, params }: ActionArgs) => {
@@ -46,7 +48,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 };
 
 const ThreadPage = () => {
-  const { data, boardSlug } = useLoaderData<typeof loader>();
+  const { data, boardSlug, isJanny } = useLoaderData<typeof loader>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
   return (
@@ -62,6 +64,7 @@ const ThreadPage = () => {
                 / created at: {formatDate(x.createdAt)}
               </span>
             )}
+            {isJanny && <button disabled>Remove</button>}
           </li>
         ))}
       </ul>

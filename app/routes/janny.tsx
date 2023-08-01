@@ -1,8 +1,9 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useRef } from "react";
 import type { ActionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { API_URL } from "~/constants";
+import { createCookie } from "@remix-run/node";
+import { API_URL, JANNY_MODE_COOKIE } from "~/constants";
+import { jannyCookie } from "~/routes/jannyCookie";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -10,7 +11,7 @@ export const action = async ({ request }: ActionArgs) => {
   const name = formData.get("name");
   const password = formData.get("password");
 
-  const res = await fetch(API_URL, {
+  await fetch(API_URL, {
     method: "post",
     body: JSON.stringify({ slug, name, password }),
     headers: {
@@ -18,7 +19,13 @@ export const action = async ({ request }: ActionArgs) => {
     },
   });
 
-  return json(await res.json());
+  const cookie = await jannyCookie.serialize("true");
+
+  return new Response(null, {
+    headers: {
+      "Set-Cookie": cookie,
+    },
+  });
 };
 
 const JannyPage = () => {
