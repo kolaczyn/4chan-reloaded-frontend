@@ -15,6 +15,7 @@ import {
 import { useRef } from "react";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { dateInfo, formatDateExtra } from "~/utils/formatDate";
+import { ReplyMessage } from "~/component/ReplyMessage";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -113,7 +114,7 @@ const ThreadPage = () => {
                 color: x.message.startsWith(">") ? "#789922" : "initial",
               }}
             >
-              {x.message}
+              <ReplyMessage message={x.message} />
             </span>
             {x.createdAt && (
               <span

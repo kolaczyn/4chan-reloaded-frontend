@@ -6,6 +6,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.9",
+    date: "02.08.2023",
+    changes: "urls in replies are now clickable",
+  },
+  {
     version: "0.0.8",
     date: "02.08.2023",
     changes: "make the website look slightly better",
@@ -52,14 +57,14 @@ const changelog: ChangelogItem[] = [
 
 const ChangelogPage = () => {
   return (
-    <div className="max-w-2xl mx-auto py-4">
+    <div className="max-w-3xl mx-auto py-4">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-4xl font-bold">Changelog</h1>
         <a className="text-blue-500 hover:underline" href="/">
           Back
         </a>
       </div>
-      <ul className="list-disc list-inside text-lg">
+      <ul className="list-disc list-inside">
         {changelog.map((x) => (
           <li key={x.version}>
             <b>{x.version}</b>, {x.date} - {x.changes}
