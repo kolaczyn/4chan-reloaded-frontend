@@ -137,7 +137,7 @@ const BoardPage = () => {
           </ul>
           <hr className="my-3" />
           <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isFirstPage || isLoading}
             onClick={() =>
               setSearchParams(
@@ -147,11 +147,9 @@ const BoardPage = () => {
           >
             Previous
           </button>
-          <span style={{ marginLeft: ".5rem", marginRight: "0.5rem" }}>
-            Current page: {currentPage}
-          </span>
+          <span className="mx-2">Current page: {currentPage}</span>
           <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLastPage || isLoading}
             onClick={() =>
               setSearchParams(
