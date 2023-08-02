@@ -11,18 +11,24 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import type { BoardsThreadsDto } from "~/types";
+import type { SyntheticEvent } from "react";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 
 const PAGE_SIZE = 6;
+const DEFAULT_SORT = "replyCount";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const boardSlug = params.boardSlug;
-  const page = new URL(request.url).searchParams.get("page") ?? "1";
+
+  const searchParams = new URL(request.url).searchParams;
+  const page = searchParams.get("page") ?? "1";
+  const sortOrder = searchParams.get("sortOrder") ?? DEFAULT_SORT;
+
   const isJanny = await getIsJannyFromCookie(request);
   const res: BoardsThreadsDto = await fetch(
-    `${API_URL}/${boardSlug}?page=${page}&pageSize=${PAGE_SIZE}`
+    `${API_URL}/${boardSlug}?page=${page}&pageSize=${PAGE_SIZE}&sortOrder=${sortOrder}`
   ).then((res) => res.json());
   return { isJanny, boardsThreads: res };
 };
@@ -62,6 +68,15 @@ const BoardPage = () => {
   const isFirstPage = currentPage === 1;
   const isLastPage = data.threads.length < PAGE_SIZE;
 
+  const handleSelectSort = (e: SyntheticEvent<HTMLSelectElement>) => {
+    console.log(e.currentTarget.value);
+    setSearchParams(
+      new URLSearchParams({ page: "1", sortOrder: e.currentTarget.value })
+    );
+  };
+
+  const isLoading = navigation.state === "loading";
+
   return (
     <>
       <h1
@@ -77,8 +92,15 @@ const BoardPage = () => {
 
       {!!data.threads.length && (
         <>
+          <div>
+            <label>Sort by</label>
+            <select onChange={handleSelectSort} name="cars" id="cars">
+              <option value="replyCount">reply count</option>
+              <option value="creationDate">creation date</option>
+            </select>
+          </div>
           <h2>Threads:</h2>
-          <ul>
+          <ul style={{ opacity: isLoading ? "55%" : "100%" }}>
             {data.threads.map((x) => (
               <li key={x.id}>
                 <a href={`/boards/${data.slug}/${x.id}`}>
@@ -94,7 +116,7 @@ const BoardPage = () => {
             ))}
           </ul>
           <button
-            disabled={isFirstPage}
+            disabled={isFirstPage || isLoading}
             onClick={() =>
               setSearchParams(
                 new URLSearchParams({ page: `${currentPage - 1}` })
@@ -103,8 +125,11 @@ const BoardPage = () => {
           >
             previous page
           </button>
+          <span style={{ marginLeft: ".5rem", marginRight: "0.5rem" }}>
+            Current page: {currentPage}
+          </span>
           <button
-            disabled={isLastPage}
+            disabled={isLastPage || isLoading}
             onClick={() =>
               setSearchParams(
                 new URLSearchParams({ page: `${currentPage + 1}` })
