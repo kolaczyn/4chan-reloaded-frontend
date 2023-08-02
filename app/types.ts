@@ -18,3 +18,12 @@ export type ThreadDto = {
   id: number;
   replies: { message: string; createdAt: string | null; id: number }[];
 };
+
+export type SortOrderDto = "bump" | "creationDate" | "replyCount";
+
+export type BoardsThreadsQueryDto = {
+  slug: string;
+  page: number;
+  pageSize: number;
+  sortOrder: SortOrderDto | (string & {});
+};

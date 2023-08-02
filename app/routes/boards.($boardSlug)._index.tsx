@@ -10,25 +10,39 @@ import {
   useNavigation,
   useSearchParams,
 } from "@remix-run/react";
-import type { BoardsThreadsDto } from "~/types";
+import type {
+  BoardsThreadsDto,
+  BoardsThreadsQueryDto,
+  SortOrderDto,
+} from "~/types";
 import type { SyntheticEvent } from "react";
 import { useRef } from "react";
 import { formatDate } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
+import { toQueryString } from "~/utils/toQueryString";
 
 const PAGE_SIZE = 6;
-const DEFAULT_SORT = "replyCount";
+const DEFAULT_SORT: SortOrderDto = "bump";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const boardSlug = params.boardSlug;
+  if (!boardSlug) {
+    return;
+  }
 
   const searchParams = new URL(request.url).searchParams;
   const page = searchParams.get("page") ?? "1";
   const sortOrder = searchParams.get("sortOrder") ?? DEFAULT_SORT;
 
   const isJanny = await getIsJannyFromCookie(request);
+  const query: BoardsThreadsQueryDto = {
+    slug: boardSlug,
+    page: Number(page),
+    pageSize: Number(PAGE_SIZE),
+    sortOrder,
+  };
   const res: BoardsThreadsDto = await fetch(
-    `${API_URL}/${boardSlug}?page=${page}&pageSize=${PAGE_SIZE}&sortOrder=${sortOrder}`
+    `${API_URL}/${boardSlug}?${toQueryString(query)}`
   ).then((res) => res.json());
   return { isJanny, boardsThreads: res };
 };
@@ -37,15 +51,13 @@ export const action = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message");
 
-  const res = await fetch(`${API_URL}/${params.boardSlug}/threads`, {
+  return await fetch(`${API_URL}/${params.boardSlug}/threads`, {
     method: "post",
     body: JSON.stringify({ message }),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
   }).then((res) => res.json());
-
-  return res;
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
@@ -69,7 +81,6 @@ const BoardPage = () => {
   const isLastPage = data.threads.length < PAGE_SIZE;
 
   const handleSelectSort = (e: SyntheticEvent<HTMLSelectElement>) => {
-    console.log(e.currentTarget.value);
     setSearchParams(
       new URLSearchParams({ page: "1", sortOrder: e.currentTarget.value })
     );
@@ -95,6 +106,7 @@ const BoardPage = () => {
           <div>
             <label>Sort by</label>
             <select onChange={handleSelectSort} name="cars" id="cars">
+              <option value="bump">bump order</option>
               <option value="replyCount">reply count</option>
               <option value="creationDate">creation date</option>
             </select>

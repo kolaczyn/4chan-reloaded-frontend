@@ -6,6 +6,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.7",
+    date: "02.08.2023",
+    changes: "add sort by bump order",
+  },
+  {
     version: "0.0.6",
     date: "02.08.2023",
     changes:
