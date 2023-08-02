@@ -23,18 +23,25 @@ const HomePage = () => {
   const { boards, isJanny } = useLoaderData<typeof loader>();
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Boards</h1>
-      <ul>
+    <div className="max-w-2xl mx-auto py-4">
+      <h1 className="text-3xl">Boards</h1>
+      <ul className="my-5">
         {boards.map((x) => (
           <li key={x.slug}>
-            <a href={`/boards/${x.slug}`}>{x.name}</a>
+            <a
+              className="text-blue-500 hover:underline font-bold"
+              href={`/boards/${x.slug}`}
+            >
+              {x.name}
+            </a>
             {isJanny && <button disabled>Delete</button>}
           </li>
         ))}
       </ul>
 
-      <a href="/changelog">See changelog</a>
+      <a className="text-blue-500 hover:underline" href="/changelog">
+        See changelog
+      </a>
       <br />
       {isJanny && <a href="/janny">Go to panel</a>}
     </div>

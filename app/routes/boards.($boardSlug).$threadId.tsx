@@ -13,8 +13,8 @@ import {
   useRevalidator,
 } from "@remix-run/react";
 import { useRef } from "react";
-import { formatDate } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
+import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -96,10 +96,15 @@ const ThreadPage = () => {
   };
 
   return (
-    <div>
-      <a href={`/boards/${boardSlug}`}>Back</a>
+    <div className="max-w-2xl mx-auto py-4">
+      <a
+        className="text-blue-500 hover:underline"
+        href={`/boards/${boardSlug}`}
+      >
+        Back
+      </a>
 
-      <ul>
+      <ul className="list-disc list-inside mt-2">
         {data.replies.map((x) => (
           <li key={x.id}>
             <span
@@ -111,8 +116,11 @@ const ThreadPage = () => {
               {x.message}
             </span>
             {x.createdAt && (
-              <span style={{ marginLeft: ".5rem", color: "rebeccapurple" }}>
-                / created at: {formatDate(x.createdAt)}
+              <span
+                title={formatDateExtra(x.createdAt)}
+                className="ml-2 opacity-60"
+              >
+                // created at: {dateInfo(x.createdAt)}
               </span>
             )}
             {isJanny && (
@@ -129,12 +137,24 @@ const ThreadPage = () => {
         </>
       )}
       <br />
-      <Form method="post">
-        <input name="message" />
-        <button type="submit" disabled={navigation.state === "submitting"}>
-          Reply
-        </button>
-      </Form>
+
+      <div className="border-blue-100 border mt-3">
+        <Form method="post">
+          <input
+            placeholder="Your reply..."
+            name="message"
+            className="bg-gray-100 my-1"
+          />
+          <br />
+          <button
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+            type="submit"
+            disabled={navigation.state === "submitting"}
+          >
+            Reply
+          </button>
+        </Form>
+      </div>
     </div>
   );
 };

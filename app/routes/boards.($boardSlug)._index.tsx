@@ -17,7 +17,7 @@ import type {
 } from "~/types";
 import type { SyntheticEvent } from "react";
 import { useRef } from "react";
-import { formatDate } from "~/utils/formatDate";
+import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { toQueryString } from "~/utils/toQueryString";
 
@@ -89,45 +89,55 @@ const BoardPage = () => {
   const isLoading = navigation.state === "loading";
 
   return (
-    <>
-      <h1
-        style={{
-          display: "inline-block",
-          marginRight: "1rem",
-          marginBottom: "1rem",
-        }}
-      >
-        /{data.slug}/ - {data.name}
-      </h1>
-      <a href="/">Back</a>
+    <div className="max-w-2xl mx-auto py-4">
+      <div className="space-x-3 flex mb-3">
+        <h1>
+          /{data.slug}/ - {data.name}
+        </h1>
+        <a className="text-blue-500 hover:underline" href="/">
+          Back
+        </a>
+      </div>
 
       {!!data.threads.length && (
         <>
-          <div>
-            <label>Sort by</label>
-            <select onChange={handleSelectSort} name="cars" id="cars">
-              <option value="bump">bump order</option>
-              <option value="replyCount">reply count</option>
-              <option value="creationDate">creation date</option>
+          <div className={"flex justify-between mb-2"}>
+            <h2 className="text-3xl">Threads:</h2>
+            <select
+              className="mb-2 bg-gray-100 p-1 hover:bg-gray-200 transition-colors cursor-pointer"
+              onChange={handleSelectSort}
+              name="cars"
+              id="cars"
+            >
+              <option value="bump">Sort by bump order</option>
+              <option value="replyCount">Sort by reply count</option>
+              <option value="creationDate">Sort by creation date</option>
             </select>
           </div>
-          <h2>Threads:</h2>
           <ul style={{ opacity: isLoading ? "55%" : "100%" }}>
             {data.threads.map((x) => (
               <li key={x.id}>
-                <a href={`/boards/${data.slug}/${x.id}`}>
+                <a
+                  className={"font-bold text-blue-500 hover:underline"}
+                  href={`/boards/${data.slug}/${x.id}`}
+                >
                   {x.message} ({x.repliesCount})
                 </a>
                 {x.createdAt && (
-                  <span style={{ marginLeft: ".5rem" }}>
-                    / created at: {formatDate(x.createdAt)}
+                  <span
+                    title={formatDateExtra(x.createdAt)}
+                    className="ml-2 opacity-60"
+                  >
+                    // {dateInfo(x.createdAt)}
                   </span>
                 )}
                 {isJanny && <button disabled>Delete</button>}
               </li>
             ))}
           </ul>
+          <hr className="my-3" />
           <button
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
             disabled={isFirstPage || isLoading}
             onClick={() =>
               setSearchParams(
@@ -135,12 +145,13 @@ const BoardPage = () => {
               )
             }
           >
-            previous page
+            Previous
           </button>
           <span style={{ marginLeft: ".5rem", marginRight: "0.5rem" }}>
             Current page: {currentPage}
           </span>
           <button
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
             disabled={isLastPage || isLoading}
             onClick={() =>
               setSearchParams(
@@ -148,22 +159,31 @@ const BoardPage = () => {
               )
             }
           >
-            next page
+            Next
           </button>
         </>
       )}
 
-      <div>
-        <h2>Start a new thread</h2>
+      <div className="border-blue-100 border mt-3">
+        <h2 className="font-medium">Start a new thread</h2>
         <Form method="POST">
-          <input ref={inputRef} name="message" />
+          <input
+            className="bg-gray-100 my-1"
+            placeholder="Your message..."
+            ref={inputRef}
+            name="message"
+          />
           <br />
-          <button disabled={navigation.state === "submitting"} type="submit">
+          <button
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+            disabled={navigation.state === "submitting"}
+            type="submit"
+          >
             Send
           </button>
         </Form>
       </div>
-    </>
+    </div>
   );
 };
 
