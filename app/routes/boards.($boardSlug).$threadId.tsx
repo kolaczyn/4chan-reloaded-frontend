@@ -107,7 +107,7 @@ const ThreadPage = () => {
 
       <ul className="mt-2">
         {data.replies.map((x, idx) => (
-          <li key={`${x.id}-${idx === 0}`}>
+          <li className="mt-4" key={`${x.id}-${idx === 0}`}>
             <span
               style={{
                 //   greentext
@@ -131,6 +131,7 @@ const ThreadPage = () => {
             {isJanny && (
               <button onClick={() => handleDelete(x.id)}>Remove</button>
             )}
+            <hr />
           </li>
         ))}
       </ul>
