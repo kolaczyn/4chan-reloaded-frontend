@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 type Props = {
   message: string;
 };
@@ -8,8 +10,9 @@ const isUrl = (str: string) =>
 export const ReplyMessage = ({ message }: Props) => {
   const words = message.split(" ");
 
-  return words.map((x) => (
-    <>
+  // using idx as key - not perfect but good enough for now
+  return words.map((x, idx) => (
+    <Fragment key={idx}>
       {isUrl(x) ? (
         <a
           target="_blank"
@@ -20,8 +23,8 @@ export const ReplyMessage = ({ message }: Props) => {
           {x}
         </a>
       ) : (
-        x
+        <span>{x}</span>
       )}{" "}
-    </>
+    </Fragment>
   ));
 };

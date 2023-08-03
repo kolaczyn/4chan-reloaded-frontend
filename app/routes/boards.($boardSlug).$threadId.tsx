@@ -106,14 +106,15 @@ const ThreadPage = () => {
       </a>
 
       <ul className="list-disc list-inside mt-2">
-        {data.replies.map((x) => (
-          <li key={x.id}>
+        {data.replies.map((x, idx) => (
+          <li key={`${x.id}-${idx === 0}`}>
             <span
               style={{
                 //   greentext
                 color: x.message.startsWith(">") ? "#789922" : "initial",
               }}
             >
+              {idx === 0 && <b>{data.title} </b>}
               <ReplyMessage message={x.message} />
             </span>
             {x.createdAt && (

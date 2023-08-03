@@ -16,12 +16,11 @@ import type {
   SortOrderDto,
 } from "~/types";
 import type { SyntheticEvent } from "react";
-import { useRef } from "react";
 import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { toQueryString } from "~/utils/toQueryString";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
@@ -50,10 +49,11 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
 export const action = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message");
+  const title = formData.get("title");
 
   return await fetch(`${API_URL}/${params.boardSlug}/threads`, {
     method: "post",
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ message, title }),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
@@ -72,7 +72,6 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 const BoardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const navigation = useNavigation();
 
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
@@ -114,6 +113,33 @@ const BoardPage = () => {
               <option value="creationDate">Sort by creation date</option>
             </select>
           </div>
+          <div className="flex mb-3">
+            <div className="inline-block mx-auto">
+              <button
+                className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isFirstPage || isLoading}
+                onClick={() =>
+                  setSearchParams(
+                    new URLSearchParams({ page: `${currentPage - 1}` })
+                  )
+                }
+              >
+                Previous
+              </button>
+              <span className="mx-2">Current page: {currentPage}</span>
+              <button
+                className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLastPage || isLoading}
+                onClick={() =>
+                  setSearchParams(
+                    new URLSearchParams({ page: `${currentPage + 1}` })
+                  )
+                }
+              >
+                Next
+              </button>
+            </div>
+          </div>
           <ul style={{ opacity: isLoading ? "55%" : "100%" }}>
             {data.threads.map((x) => (
               <li key={x.id}>
@@ -135,42 +161,23 @@ const BoardPage = () => {
               </li>
             ))}
           </ul>
-          <hr className="my-3" />
-          <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isFirstPage || isLoading}
-            onClick={() =>
-              setSearchParams(
-                new URLSearchParams({ page: `${currentPage - 1}` })
-              )
-            }
-          >
-            Previous
-          </button>
-          <span className="mx-2">Current page: {currentPage}</span>
-          <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLastPage || isLoading}
-            onClick={() =>
-              setSearchParams(
-                new URLSearchParams({ page: `${currentPage + 1}` })
-              )
-            }
-          >
-            Next
-          </button>
         </>
       )}
 
-      <div className="border-blue-100 border mt-3">
-        <h2 className="font-medium">Start a new thread</h2>
+      <hr className="mt-3" />
+
+      <div className="mt-3">
+        <h2 className="font-medium mb-2 text-lg">Start a new thread</h2>
         <Form method="POST">
-          <input
-            className="bg-gray-100 my-1"
-            placeholder="Your message..."
-            ref={inputRef}
-            name="message"
-          />
+          <label htmlFor="title" className="font-medium mr-2 block">
+            Title:
+          </label>
+          <input id="title" className="bg-gray-100 my-1 d-block" name="title" />
+          <br />
+          <label htmlFor="message" className={"font-medium mr-2 block"}>
+            Message:
+          </label>
+          <textarea className="bg-gray-100 my-1" name="message" />
           <br />
           <button
             className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"

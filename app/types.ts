@@ -16,6 +16,7 @@ export type BoardsThreadsDto = {
 
 export type ThreadDto = {
   id: number;
+  title: string | null;
   replies: { message: string; createdAt: string | null; id: number }[];
 };
 
