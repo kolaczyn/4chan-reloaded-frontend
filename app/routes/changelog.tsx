@@ -8,6 +8,11 @@ const changelog: ChangelogItem[] = [
   {
     version: "0.0.12",
     date: "03.08.2023",
+    changes: "allow to show or hide youtube videos embed and show reply id",
+  },
+  {
+    version: "0.0.12",
+    date: "03.08.2023",
     changes: "embed youtube videos",
   },
   {

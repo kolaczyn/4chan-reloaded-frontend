@@ -1,7 +1,4 @@
-import { Fragment } from "react";
-import * as url from "url";
-import is from "@sindresorhus/is";
-import regExp = is.regExp;
+import { useState } from "react";
 
 type Props = {
   message: string;
@@ -23,6 +20,37 @@ const convertToEmbeddedUrl = (url: string) => {
   }
 };
 
+const YoutubeEmbed = ({ embedUrl, url }: { embedUrl: string; url: string }) => {
+  const [isShowing, setIsShowing] = useState(false);
+  return (
+    <>
+      {isShowing ? (
+        <>
+          <iframe
+            width="560"
+            height="315"
+            src={embedUrl}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          />
+          <button className="text-blue-500" onClick={() => setIsShowing(false)}>
+            {" "}
+            [Hide]
+          </button>
+        </>
+      ) : (
+        <span>
+          <span>{url}</span>
+          <button className="text-blue-500" onClick={() => setIsShowing(true)}>
+            {" "}
+            [Embed]
+          </button>
+        </span>
+      )}
+    </>
+  );
+};
+
 export const ReplyMessage = ({ message }: Props) => {
   const words = message.split(" ");
 
@@ -31,19 +59,7 @@ export const ReplyMessage = ({ message }: Props) => {
     const isUrl = checkIfIsUrl(x);
     const youtubeEmbeded = convertToEmbeddedUrl(x);
     if (youtubeEmbeded) {
-      return (
-        <Fragment key={idx}>
-          {youtubeEmbeded}
-          <iframe
-            key={idx}
-            width="373"
-            height="210"
-            src={youtubeEmbeded}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          />
-        </Fragment>
-      );
+      return <YoutubeEmbed url={x} embedUrl={youtubeEmbeded} key={idx} />;
     }
     if (isUrl) {
       return (

@@ -96,6 +96,12 @@ const ThreadPage = () => {
     revalidator.revalidate();
   };
 
+  const handleClickId = (id: number) => {
+    const element = document.getElementById(`${id}`);
+    element?.scrollIntoView();
+    window.location.hash = `${id}`;
+  };
+
   return (
     <div className="max-w-2xl mx-auto py-4">
       <a
@@ -107,7 +113,11 @@ const ThreadPage = () => {
 
       <ul className="mt-2">
         {data.replies.map((x, idx) => (
-          <li className="mt-4" key={`${x.id}-${idx === 0}`}>
+          <li
+            id={`${x.id}` ?? undefined}
+            className="mt-4"
+            key={`${x.id}-${idx === 0}`}
+          >
             <span
               style={{
                 //   greentext
@@ -120,14 +130,18 @@ const ThreadPage = () => {
               {idx === 0 && <b>{data.title} </b>}
               <ReplyMessage message={x.message} />
             </span>
+            <span
+              className="opacity-60 cursor-pointer"
+              onClick={() => handleClickId(x.id)}
+            >
+              (no. {x.id}
+            </span>
             {x.createdAt && (
-              <span
-                title={formatDateExtra(x.createdAt)}
-                className="ml-2 opacity-60"
-              >
-                // {dateInfo(x.createdAt)}
+              <span title={formatDateExtra(x.createdAt)} className="opacity-60">
+                , {dateInfo(x.createdAt)}
               </span>
             )}
+            <span className="opacity-50">)</span>
             {isJanny && (
               <button onClick={() => handleDelete(x.id)}>Remove</button>
             )}

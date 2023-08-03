@@ -6,7 +6,7 @@ export const dateInfo = (dateString: string) => {
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based, so we add 1 to get the correct month
 
-  return `created on ${day}-${month} at ${hours}:${minutes}`;
+  return `${day}-${month} at ${hours}:${minutes}`;
 };
 
 export const formatDateExtra = (dateString: string) => {
