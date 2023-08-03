@@ -6,6 +6,12 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.14",
+    date: "03.08.2023",
+    changes:
+      "add refresh button to replies and show loading indicator on replies",
+  },
+  {
     version: "0.0.13",
     date: "03.08.2023",
     changes: "allow bold (for one word only)",

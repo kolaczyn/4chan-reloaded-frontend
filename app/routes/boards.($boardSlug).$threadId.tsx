@@ -86,6 +86,9 @@ const ThreadPage = () => {
   const navigation = useNavigation();
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
+  const isLoading =
+    navigation.state === "loading" || revalidator.state === "loading";
+
   const handleDelete = async (id: number) => {
     await deleteReplyAction(
       boardSlug ?? "",
@@ -111,7 +114,7 @@ const ThreadPage = () => {
         Back
       </a>
 
-      <ul className="mt-2">
+      <ul style={{ opacity: isLoading ? "55%" : "100%" }} className="mt-2">
         {data.replies.map((x, idx) => (
           <li
             id={`${x.id}` ?? undefined}
@@ -156,7 +159,16 @@ const ThreadPage = () => {
           <label htmlFor="password">Password</label>
         </>
       )}
-      <br />
+
+      <div className="flex justify-between mt-2">
+        <div />
+        <button
+          onClick={() => revalidator.revalidate()}
+          className="text-blue-500"
+        >
+          Refresh
+        </button>
+      </div>
 
       <div className="border-blue-100 border mt-3">
         <Form method="post">
