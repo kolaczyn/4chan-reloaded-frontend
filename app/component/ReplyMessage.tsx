@@ -32,14 +32,17 @@ export const ReplyMessage = ({ message }: Props) => {
     const youtubeEmbeded = convertToEmbeddedUrl(x);
     if (youtubeEmbeded) {
       return (
-        <iframe
-          key={idx}
-          width="373"
-          height="210"
-          src={youtubeEmbeded}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        />
+        <Fragment key={idx}>
+          {youtubeEmbeded}
+          <iframe
+            key={idx}
+            width="373"
+            height="210"
+            src={youtubeEmbeded}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          />
+        </Fragment>
       );
     }
     if (isUrl) {
@@ -51,10 +54,10 @@ export const ReplyMessage = ({ message }: Props) => {
           className="text-blue-500 hover:underline"
           href={x}
         >
-          {x}
+          {x}{" "}
         </a>
       );
     }
-    return <span>{x}</span>;
+    return <span>{x} </span>;
   });
 };
