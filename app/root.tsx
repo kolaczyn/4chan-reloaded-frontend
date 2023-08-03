@@ -22,7 +22,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-gradient-to-t from-neutral-100 via-gray-100 to-cyan-100 min-h-screen">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

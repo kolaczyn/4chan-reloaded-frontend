@@ -6,6 +6,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.15",
+    date: "03.08.2023",
+    changes: "make the background color a subtle gradient",
+  },
+  {
     version: "0.0.14",
     date: "03.08.2023",
     changes:
