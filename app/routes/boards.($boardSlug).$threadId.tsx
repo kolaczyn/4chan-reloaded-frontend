@@ -125,7 +125,7 @@ const ThreadPage = () => {
                 title={formatDateExtra(x.createdAt)}
                 className="ml-2 opacity-60"
               >
-                // created at: {dateInfo(x.createdAt)}
+                // {dateInfo(x.createdAt)}
               </span>
             )}
             {isJanny && (
