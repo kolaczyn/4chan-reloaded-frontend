@@ -105,7 +105,7 @@ const ThreadPage = () => {
         Back
       </a>
 
-      <ul className="list-disc list-inside mt-2">
+      <ul className="mt-2">
         {data.replies.map((x, idx) => (
           <li key={`${x.id}-${idx === 0}`}>
             <span
@@ -114,6 +114,9 @@ const ThreadPage = () => {
                 color: x.message.startsWith(">") ? "#789922" : "initial",
               }}
             >
+              {x.imageUrl && (
+                <img alt={data.title ?? undefined} src={x.imageUrl} />
+              )}
               {idx === 0 && <b>{data.title} </b>}
               <ReplyMessage message={x.message} />
             </span>

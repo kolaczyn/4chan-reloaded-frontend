@@ -6,6 +6,12 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.11",
+    date: "03.08.2023",
+    changes:
+      "add images (single image per thread). Also fix crashing if a title is not provided",
+  },
+  {
     version: "0.0.10",
     date: "03.08.2023",
     changes: "add titles for threads",

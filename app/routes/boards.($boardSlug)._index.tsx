@@ -19,6 +19,8 @@ import type { SyntheticEvent } from "react";
 import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { toQueryString } from "~/utils/toQueryString";
+import { useState } from "react";
+import { redirect } from "@remix-run/node";
 
 const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
@@ -46,18 +48,27 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
   return { isJanny, boardsThreads: res };
 };
 
+const urlPattern =
+  /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+
 export const action = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message");
-  const title = formData.get("title");
+  const title = formData.get("title") || undefined;
+  const imageUrl = formData.get("image-url") || undefined;
 
-  return await fetch(`${API_URL}/${params.boardSlug}/threads`, {
+  if (!message || !title || !imageUrl) return null;
+  if (!urlPattern.test(imageUrl as string)) return null;
+
+  const result = await fetch(`${API_URL}/${params.boardSlug}/threads`, {
     method: "post",
-    body: JSON.stringify({ message, title }),
+    body: JSON.stringify({ message, title, imageUrl }),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
-  }).then((res) => res.json());
+  }).then((x) => x.json());
+
+  return redirect(`/boards/${params.boardSlug}/${result.id}`);
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
@@ -73,6 +84,7 @@ const BoardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+  const [imageInputText, setImageInputText] = useState("");
 
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
@@ -166,27 +178,53 @@ const BoardPage = () => {
 
       <hr className="mt-3" />
 
-      <div className="mt-3">
-        <h2 className="font-medium mb-2 text-lg">Start a new thread</h2>
-        <Form method="POST">
-          <label htmlFor="title" className="font-medium mr-2 block">
-            Title:
-          </label>
-          <input id="title" className="bg-gray-100 my-1 d-block" name="title" />
-          <br />
-          <label htmlFor="message" className={"font-medium mr-2 block"}>
-            Message:
-          </label>
-          <textarea className="bg-gray-100 my-1" name="message" />
-          <br />
-          <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
-            disabled={navigation.state === "submitting"}
-            type="submit"
-          >
-            Send
-          </button>
-        </Form>
+      <div className="mt-3 grid grid-cols-2">
+        <div>
+          <h2 className="font-medium mb-2 text-lg">Start a new thread</h2>
+          <Form method="POST">
+            <label htmlFor="title" className="font-medium mr-2 block">
+              Title: <span className="text-gray-400 text-sm">(required)</span>
+            </label>
+            <input
+              id="title"
+              className="bg-gray-100 my-1 d-block"
+              name="title"
+            />
+            <label htmlFor="image-url" className="font-medium mr-2 block">
+              Image url:{" "}
+              <span className="text-gray-400 text-sm">(required)</span>
+            </label>
+            <input
+              id="image-url"
+              className="bg-gray-100 my-1 d-block"
+              name="image-url"
+              value={imageInputText}
+              onChange={(e) => setImageInputText(e.target.value)}
+            />
+            <br />
+            <label htmlFor="message" className={"font-medium mr-2 block"}>
+              Message: <span className="text-gray-400 text-sm">(required)</span>
+            </label>
+            <textarea className="bg-gray-100 my-1" name="message" />
+            <br />
+            <button
+              className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+              disabled={navigation.state === "submitting"}
+              type="submit"
+            >
+              Send
+            </button>
+          </Form>
+        </div>
+        {!!imageInputText ? (
+          <img
+            alt="Your image"
+            src={imageInputText}
+            className="max-w-xs aspect-auto max-h-40"
+          />
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );
