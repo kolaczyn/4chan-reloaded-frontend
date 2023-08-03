@@ -74,6 +74,11 @@ export const ReplyMessage = ({ message }: Props) => {
         </a>
       );
     }
-    return <span>{x} </span>;
+    const isBold = x.startsWith("*") && x.endsWith("*");
+    return (
+      <span key={idx} className={isBold ? "font-bold" : ""}>
+        {x}{" "}
+      </span>
+    );
   });
 };
