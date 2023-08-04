@@ -8,7 +8,12 @@ const changelog: ChangelogItem[] = [
   {
     version: "0.0.16",
     date: "04.08.2023",
-    changes: "Add RSS feed (/a/ only)",
+    changes: "add RSS feed for all boards' thread and threads' replies",
+  },
+  {
+    version: "0.0.16",
+    date: "04.08.2023",
+    changes: "add RSS feed (/a/ only)",
   },
   {
     version: "0.0.15",

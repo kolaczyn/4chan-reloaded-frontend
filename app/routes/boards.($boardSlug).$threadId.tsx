@@ -161,7 +161,14 @@ const ThreadPage = () => {
       )}
 
       <div className="flex justify-between mt-2">
-        <div />
+        <a
+          className="text-blue-500 hover:underline"
+          target="_blank"
+          rel="noreferrer"
+          href={`https://api.kolaczyn.com/${boardSlug}/${data.id}`}
+        >
+          Rss Feed
+        </a>
         <button
           onClick={() => revalidator.revalidate()}
           className="text-blue-500"

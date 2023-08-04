@@ -176,6 +176,15 @@ const BoardPage = () => {
         </>
       )}
 
+      <hr className="my-3" />
+      <a
+        className="text-blue-500 hover:underline"
+        target="_blank"
+        rel="noreferrer"
+        href={`https://api.kolaczyn.com/${data.slug}`}
+      >
+        Rss Feed
+      </a>
       <hr className="mt-3" />
 
       <div className="mt-3 grid grid-cols-2">
