@@ -15,7 +15,7 @@ import {
 import { useRef } from "react";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { dateInfo, formatDateExtra } from "~/utils/formatDate";
-import { ReplyMessage } from "~/component/ReplyMessage";
+import { ReplyMessage } from "~/component/ReplyMessage/ReplyMessage";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
