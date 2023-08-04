@@ -17,15 +17,17 @@ export type BoardsThreadsDto = {
   threads: ThreadTeaserDto[];
 };
 
+export type ReplyDto = {
+  message: string;
+  createdAt: string | null;
+  id: number;
+  imageUrl: string | null;
+};
+
 export type ThreadDto = {
   id: number;
   title: string | null;
-  replies: {
-    message: string;
-    createdAt: string | null;
-    id: number;
-    imageUrl: string | null;
-  }[];
+  replies: ReplyDto[];
 };
 
 export type SortOrderDto = "bump" | "creationDate" | "replyCount";

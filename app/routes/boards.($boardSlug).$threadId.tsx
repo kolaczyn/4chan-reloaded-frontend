@@ -14,8 +14,9 @@ import {
 } from "@remix-run/react";
 import { useRef } from "react";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
-import { dateInfo, formatDateExtra } from "~/utils/formatDate";
-import { ReplyMessage } from "~/components/ReplyMessage/ReplyMessage";
+import { AppLink } from "~/components/AppLink";
+import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
+import { ReplyCard } from "~/components/threadsReplies/ReplyCard";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -109,13 +110,7 @@ const ThreadPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto py-4">
-      <a
-        className="text-blue-500 hover:underline"
-        href={`/boards/${boardSlug}`}
-      >
-        Back
-      </a>
-
+      <AppLink href={`/boards/${boardSlug}`}>Back</AppLink>
       <ul style={{ opacity: isLoading ? "55%" : "100%" }} className="mt-2">
         {data.replies.map((x, idx) => (
           <li
@@ -123,29 +118,14 @@ const ThreadPage = () => {
             className="mt-4"
             key={`${x.id}-${idx === 0}`}
           >
-            <span>
-              {x.imageUrl && (
-                <img alt={data.title ?? undefined} src={x.imageUrl} />
-              )}
-              {idx === 0 && <b>{data.title} </b>}
-              <ReplyMessage message={x.message} />
-            </span>
-            <span
-              className="opacity-60 cursor-pointer"
-              onClick={() => handleClickId(x.id)}
-            >
-              (no. {x.id}
-            </span>
-            {x.createdAt && (
-              <span title={formatDateExtra(x.createdAt)} className="opacity-60">
-                , {dateInfo(x.createdAt)}
-              </span>
-            )}
-            <span className="opacity-50">)</span>
-            {isJanny && (
-              <button onClick={() => handleDelete(x.id)}>Remove</button>
-            )}
-            <hr />
+            <ReplyCard
+              {...x}
+              isJanny={isJanny}
+              isFirst={idx === 0}
+              threadTitle={data.title}
+              handleDelete={() => handleDelete(x.id)}
+              handleClickId={() => handleClickId(x.id)}
+            />
           </li>
         ))}
       </ul>
@@ -157,22 +137,10 @@ const ThreadPage = () => {
         </>
       )}
 
-      <div className="flex justify-between mt-2">
-        <a
-          className="text-blue-500 hover:underline"
-          target="_blank"
-          rel="noreferrer"
-          href={`https://api.kolaczyn.com/${boardSlug}/${data.id}`}
-        >
-          Rss Feed
-        </a>
-        <button
-          onClick={() => revalidator.revalidate()}
-          className="text-blue-500"
-        >
-          Refresh
-        </button>
-      </div>
+      <RepliesActions
+        rssFeedUrl={`https://api.kolaczyn.com/${boardSlug}/${data.id}`}
+        handleRefresh={() => revalidator.revalidate()}
+      />
 
       <div className="border-blue-100 border mt-3">
         <Form method="post">
