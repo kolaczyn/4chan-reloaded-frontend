@@ -1,8 +1,7 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useRef } from "react";
 import type { ActionArgs } from "@remix-run/node";
-import { createCookie } from "@remix-run/node";
-import { API_URL, JANNY_MODE_COOKIE } from "~/constants";
+import { API_URL } from "~/constants";
 import { jannyCookie } from "~/routes/jannyCookie";
 
 export const action = async ({ request }: ActionArgs) => {

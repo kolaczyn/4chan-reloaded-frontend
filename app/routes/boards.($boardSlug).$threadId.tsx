@@ -17,6 +17,7 @@ import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { AppLink } from "~/components/AppLink";
 import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
 import { ReplyCard } from "~/components/threadsReplies/ReplyCard";
+import { Loader } from "~/components/Loader";
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -111,23 +112,26 @@ const ThreadPage = () => {
   return (
     <div className="max-w-2xl mx-auto py-4">
       <AppLink href={`/boards/${boardSlug}`}>Back</AppLink>
-      <ul style={{ opacity: isLoading ? "55%" : "100%" }} className="mt-2">
-        {data.replies.map((x, idx) => (
-          <li
-            id={`${x.id}` ?? undefined}
-            className="mt-4"
-            key={`${x.id}-${idx === 0}`}
-          >
-            <ReplyCard
-              {...x}
-              isJanny={isJanny}
-              isFirst={idx === 0}
-              threadTitle={data.title}
-              handleDelete={() => handleDelete(x.id)}
-              handleClickId={() => handleClickId(x.id)}
-            />
-          </li>
-        ))}
+      <ul className="mt-2">
+        <Loader isLoading={isLoading}>
+          {data.replies.map((x, idx) => (
+            <li
+              id={`${x.id}` ?? undefined}
+              className="mt-4"
+              key={`${x.id}-${idx === 0}`}
+            >
+              <ReplyCard
+                {...x}
+                isJanny={isJanny}
+                isFirst={idx === 0}
+                threadTitle={data.title}
+                handleDelete={() => handleDelete(x.id)}
+                handleClickId={() => handleClickId(x.id)}
+              />
+            </li>
+          ))}
+        </Loader>
+        h
       </ul>
       <hr />
       {isJanny && (

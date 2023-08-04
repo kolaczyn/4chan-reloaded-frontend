@@ -16,17 +16,17 @@ import type {
   SortOrderDto,
 } from "~/types";
 import type { SyntheticEvent } from "react";
-import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { toQueryString } from "~/utils/toQueryString";
 import { useState } from "react";
 import { redirect } from "@remix-run/node";
-import App from "~/root";
-import { AppButton } from "~/components/AppButton";
 import { AppContainer } from "~/components/layout/AppContainer";
 import { SortOptions } from "~/components/boardsThreads/SortOptions";
 import { Pagination } from "~/components/boardsThreads/Pagination";
 import { ThreadTeaser } from "~/components/boardsThreads/ThreadTeaser";
+import { AppLink } from "~/components/AppLink";
+import { AppLinkExternal } from "~/components/AppLinkExternal";
+import { Loader } from "~/components/Loader";
 
 const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
@@ -120,14 +120,12 @@ const BoardPage = () => {
         <h1>
           /{data.slug}/ - {data.name}
         </h1>
-        <a className="text-blue-500 hover:underline" href="/">
-          Back
-        </a>
+        <AppLink href="/">Back</AppLink>
       </div>
 
       {!!data.threads.length && (
         <>
-          <div className={"flex justify-between mb-2"}>
+          <div className="flex justify-between mb-2">
             <h2 className="text-3xl">Threads:</h2>
             <SortOptions handleSelectSort={handleSelectSort} />
           </div>
@@ -139,25 +137,21 @@ const BoardPage = () => {
             isLoading={isLoading}
           />
 
-          <ul style={{ opacity: isLoading ? "55%" : "100%" }}>
-            {data.threads.map((x) => (
-              <li key={x.id}>
-                <ThreadTeaser {...x} isJanny={isJanny} slug={data.slug} />
-              </li>
-            ))}
+          <ul>
+            <Loader isLoading={isLoading}>
+              {data.threads.map((x) => (
+                <li key={x.id}>
+                  <ThreadTeaser {...x} isJanny={isJanny} slug={data.slug} />
+                </li>
+              ))}
+            </Loader>
           </ul>
         </>
       )}
-
       <hr className="my-3" />
-      <a
-        className="text-blue-500 hover:underline"
-        target="_blank"
-        rel="noreferrer"
-        href={`https://api.kolaczyn.com/${data.slug}`}
-      >
+      <AppLinkExternal href={`https://api.kolaczyn.com/${data.slug}`}>
         Rss Feed
-      </a>
+      </AppLinkExternal>
       <hr className="mt-3" />
 
       <div className="mt-3 grid grid-cols-2">
