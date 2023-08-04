@@ -43,14 +43,6 @@ const HomePage = () => {
         <a className="text-blue-500 hover:underline" href="/changelog">
           See changelog
         </a>
-        <a
-          className="text-blue-500 hover:underline"
-          href="https://api.kolaczyn.com/rss.xml"
-          target="_blank"
-          rel="noreferrer"
-        >
-          RSS feed
-        </a>
         {isJanny && <a href="/janny">Go to panel</a>}
       </div>
     </div>
