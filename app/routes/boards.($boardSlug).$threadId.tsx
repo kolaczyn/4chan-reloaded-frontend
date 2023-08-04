@@ -85,6 +85,7 @@ const ThreadPage = () => {
   const { data, boardSlug, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const replyInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const isLoading =
     navigation.state === "loading" || revalidator.state === "loading";
@@ -100,9 +101,10 @@ const ThreadPage = () => {
   };
 
   const handleClickId = (id: number) => {
-    const element = document.getElementById(`${id}`);
-    element?.scrollIntoView();
-    window.location.hash = `${id}`;
+    if (!replyInputRef.current) return;
+    replyInputRef.current.value = `>>${id} `;
+
+    replyInputRef.current.focus();
   };
 
   return (
@@ -121,12 +123,7 @@ const ThreadPage = () => {
             className="mt-4"
             key={`${x.id}-${idx === 0}`}
           >
-            <span
-              style={{
-                //   greentext
-                color: x.message.startsWith(">") ? "#789922" : "initial",
-              }}
-            >
+            <span>
               {x.imageUrl && (
                 <img alt={data.title ?? undefined} src={x.imageUrl} />
               )}
@@ -179,7 +176,8 @@ const ThreadPage = () => {
 
       <div className="border-blue-100 border mt-3">
         <Form method="post">
-          <input
+          <textarea
+            ref={replyInputRef}
             placeholder="Your reply..."
             name="message"
             className="bg-gray-100 my-1"

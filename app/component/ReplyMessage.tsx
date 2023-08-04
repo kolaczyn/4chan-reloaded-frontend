@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 type Props = {
   message: string;
@@ -51,8 +52,83 @@ const YoutubeEmbed = ({ embedUrl, url }: { embedUrl: string; url: string }) => {
   );
 };
 
+const ReplyText = ({ text }: { text: string }) => {
+  const [replyText, setReplyText] = useState<string | null>(null);
+  const isBold = text.startsWith("*") && text.endsWith("*");
+
+  const isQuote = text.startsWith(">>");
+  const quoteId = text.replace(">>", "");
+  const isGreentext = text.startsWith(">") && !isQuote;
+
+  useEffect(() => {
+    console.log(">", quoteId, "<");
+    const element = document.getElementById(quoteId);
+    if (!element) {
+      setReplyText("__not__found__");
+      return;
+    }
+
+    setReplyText(element?.innerText ?? null);
+  }, [quoteId]);
+
+  const getColor = () => {
+    if (isQuote) return "#d00";
+    if (isGreentext) return "#789922";
+    return "";
+  };
+
+  if (!isQuote) {
+    return (
+      <span style={{ color: getColor() }} className={isBold ? "font-bold" : ""}>
+        {text}{" "}
+      </span>
+    );
+  }
+
+  if (replyText === "__not__found__") {
+    return (
+      <span
+        style={{ color: getColor() }}
+        className={[
+          isBold ? "font-bold" : "",
+          replyText === "__not__found__" ? "line-through" : "",
+        ].join(" ")}
+      >
+        {text}{" "}
+      </span>
+    );
+  }
+
+  return (
+    <Tooltip.Provider>
+      <Tooltip.Root delayDuration={125}>
+        <Tooltip.Trigger asChild>
+          <span
+            onClick={() => {
+              document.getElementById(quoteId)?.scrollIntoView();
+            }}
+            style={{ color: getColor() }}
+            className={isBold ? "font-bold" : ""}
+          >
+            {text}{" "}
+          </span>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content
+            className="bg-amber-50 px-2 py-0.5 rounded-sm bg-opacity-70"
+            sideOffset={5}
+          >
+            {replyText}
+            <Tooltip.Arrow className="bg-opacity-70 fill-amber-50" />
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
+  );
+};
+
 export const ReplyMessage = ({ message }: Props) => {
-  const words = message.split(" ");
+  const words = message.split(/\s+|\n+/);
 
   // using idx as key - not perfect but good enough for now
   return words.map((x, idx) => {
@@ -74,11 +150,7 @@ export const ReplyMessage = ({ message }: Props) => {
         </a>
       );
     }
-    const isBold = x.startsWith("*") && x.endsWith("*");
-    return (
-      <span key={idx} className={isBold ? "font-bold" : ""}>
-        {x}{" "}
-      </span>
-    );
+
+    return <ReplyText text={x} key={idx} />;
   });
 };
