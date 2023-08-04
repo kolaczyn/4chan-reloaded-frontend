@@ -3,16 +3,18 @@ export type BoardDto = {
   name: string;
 };
 
+export type ThreadTeaserDto = {
+  id: number;
+  message: string;
+  repliesCount: number;
+  createdAt: string | null;
+  imageUrl: string | null;
+};
+
 export type BoardsThreadsDto = {
   slug: string;
   name: string;
-  threads: {
-    id: number;
-    message: string;
-    repliesCount: number;
-    createdAt: string | null;
-    imageUrl: string | null;
-  }[];
+  threads: ThreadTeaserDto[];
 };
 
 export type ThreadDto = {

@@ -21,6 +21,12 @@ import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { toQueryString } from "~/utils/toQueryString";
 import { useState } from "react";
 import { redirect } from "@remix-run/node";
+import App from "~/root";
+import { AppButton } from "~/components/AppButton";
+import { AppContainer } from "~/components/layout/AppContainer";
+import { SortOptions } from "~/components/boardsThreads/SortOptions";
+import { Pagination } from "~/components/boardsThreads/Pagination";
+import { ThreadTeaser } from "~/components/boardsThreads/ThreadTeaser";
 
 const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
@@ -98,10 +104,18 @@ const BoardPage = () => {
     );
   };
 
+  const handleSetPage = (page: number) => {
+    const newSearchParams = new URLSearchParams({
+      page: `${page}`,
+      sortOrder,
+    });
+    setSearchParams(newSearchParams);
+  };
+
   const isLoading = navigation.state === "loading";
 
   return (
-    <div className="max-w-2xl mx-auto py-4">
+    <AppContainer>
       <div className="space-x-3 flex mb-3">
         <h1>
           /{data.slug}/ - {data.name}
@@ -115,68 +129,20 @@ const BoardPage = () => {
         <>
           <div className={"flex justify-between mb-2"}>
             <h2 className="text-3xl">Threads:</h2>
-            <select
-              className="mb-2 bg-gray-100 p-1 hover:bg-gray-200 transition-colors cursor-pointer"
-              onChange={handleSelectSort}
-              name="cars"
-              id="cars"
-            >
-              <option value="bump">Sort by bump order</option>
-              <option value="replyCount">Sort by reply count</option>
-              <option value="creationDate">Sort by creation date</option>
-            </select>
+            <SortOptions handleSelectSort={handleSelectSort} />
           </div>
-          <div className="flex mb-3">
-            <div className="inline-block mx-auto">
-              <button
-                className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isFirstPage || isLoading}
-                onClick={() =>
-                  setSearchParams(
-                    new URLSearchParams({
-                      page: `${currentPage - 1}`,
-                      sortOrder,
-                    })
-                  )
-                }
-              >
-                Previous
-              </button>
-              <span className="mx-2">Current page: {currentPage}</span>
-              <button
-                className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isLastPage || isLoading}
-                onClick={() =>
-                  setSearchParams(
-                    new URLSearchParams({
-                      page: `${currentPage + 1}`,
-                      sortOrder,
-                    })
-                  )
-                }
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          <Pagination
+            isLastPage={isLastPage}
+            currentPage={currentPage}
+            handleSetPage={handleSetPage}
+            isFirstPage={isFirstPage}
+            isLoading={isLoading}
+          />
+
           <ul style={{ opacity: isLoading ? "55%" : "100%" }}>
             {data.threads.map((x) => (
               <li key={x.id}>
-                <a
-                  className={"font-bold text-blue-500 hover:underline"}
-                  href={`/boards/${data.slug}/${x.id}`}
-                >
-                  {x.message} ({x.repliesCount})
-                </a>
-                {x.createdAt && (
-                  <span
-                    title={formatDateExtra(x.createdAt)}
-                    className="ml-2 opacity-60"
-                  >
-                    // {dateInfo(x.createdAt)}
-                  </span>
-                )}
-                {isJanny && <button disabled>Delete</button>}
+                <ThreadTeaser {...x} isJanny={isJanny} slug={data.slug} />
               </li>
             ))}
           </ul>
@@ -232,9 +198,9 @@ const BoardPage = () => {
             </button>
           </Form>
         </div>
-        {!!imageInputText ? (
+        {imageInputText ? (
           <img
-            alt="Your image"
+            alt="The image assigned to the thread"
             src={imageInputText}
             className="max-w-xs aspect-auto max-h-40"
           />
@@ -242,7 +208,7 @@ const BoardPage = () => {
           <div />
         )}
       </div>
-    </div>
+    </AppContainer>
   );
 };
 
