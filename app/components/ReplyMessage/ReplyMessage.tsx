@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { checkIfIsUrl } from "~/component/ReplyMessage/checkIfIsUrl";
-import { convertToEmbeddedUrl } from "~/component/ReplyMessage/convertToEmbeddedUrl";
-import { YoutubeEmbed } from "~/component/ReplyMessage/YoutubeEmbed";
-import { QuoteTooltip } from "~/component/ReplyMessage/QuoteTooltip";
-import { LinkMessage } from "~/component/ReplyMessage/LinkMesage";
+import { checkIfIsUrl } from "~/components/ReplyMessage/checkIfIsUrl";
+import { convertToEmbeddedUrl } from "~/components/ReplyMessage/convertToEmbeddedUrl";
+import { YoutubeEmbed } from "~/components/ReplyMessage/YoutubeEmbed";
+import { QuoteTooltip } from "~/components/ReplyMessage/QuoteTooltip";
+import { LinkMessage } from "~/components/ReplyMessage/LinkMesage";
 
 type Props = {
   message: string;

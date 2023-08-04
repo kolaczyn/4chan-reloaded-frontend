@@ -1,7 +1,7 @@
-export type BoardsListDto = {
+export type BoardDto = {
   slug: string;
   name: string;
-}[];
+};
 
 export type BoardsThreadsDto = {
   slug: string;
