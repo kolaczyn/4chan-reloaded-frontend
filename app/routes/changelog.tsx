@@ -6,6 +6,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.17",
+    date: "04.08.2023",
+    changes: "fix sort resetting after changing page",
+  },
+  {
     version: "0.0.16",
     date: "04.08.2023",
     changes: "add RSS feed for all boards' thread and threads' replies",

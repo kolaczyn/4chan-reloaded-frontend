@@ -90,6 +90,7 @@ const BoardPage = () => {
 
   const isFirstPage = currentPage === 1;
   const isLastPage = data.threads.length < PAGE_SIZE;
+  const sortOrder = searchParams.get("sortOrder") ?? DEFAULT_SORT;
 
   const handleSelectSort = (e: SyntheticEvent<HTMLSelectElement>) => {
     setSearchParams(
@@ -132,7 +133,10 @@ const BoardPage = () => {
                 disabled={isFirstPage || isLoading}
                 onClick={() =>
                   setSearchParams(
-                    new URLSearchParams({ page: `${currentPage - 1}` })
+                    new URLSearchParams({
+                      page: `${currentPage - 1}`,
+                      sortOrder,
+                    })
                   )
                 }
               >
@@ -144,7 +148,10 @@ const BoardPage = () => {
                 disabled={isLastPage || isLoading}
                 onClick={() =>
                   setSearchParams(
-                    new URLSearchParams({ page: `${currentPage + 1}` })
+                    new URLSearchParams({
+                      page: `${currentPage + 1}`,
+                      sortOrder,
+                    })
                   )
                 }
               >
