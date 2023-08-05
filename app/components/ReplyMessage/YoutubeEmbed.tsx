@@ -10,8 +10,8 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
   return (
     <>
       {isShowing ? (
-        <>
-          <div className="aspect-w-16 aspect-h-9 -mx-2">
+        <div className="-mx-2">
+          <div className="aspect-w-16 aspect-h-9">
             <iframe
               width="560"
               height="315"
@@ -23,7 +23,7 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
           <button className="text-blue-500" onClick={() => setIsShowing(false)}>
             [Hide]
           </button>
-        </>
+        </div>
       ) : (
         <span>
           <span>{url}</span>{" "}
