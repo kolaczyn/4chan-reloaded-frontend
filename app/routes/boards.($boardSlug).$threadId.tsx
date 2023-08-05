@@ -131,7 +131,6 @@ const ThreadPage = () => {
             </li>
           ))}
         </Loader>
-        h
       </ul>
       <hr />
       {isJanny && (
