@@ -17,17 +17,15 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
             src={embedUrl}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          />
+          />{" "}
           <button className="text-blue-500" onClick={() => setIsShowing(false)}>
-            {" "}
             [Hide]
           </button>
         </>
       ) : (
         <span>
-          <span>{url}</span>
+          <span>{url}</span>{" "}
           <button className="text-blue-500" onClick={() => setIsShowing(true)}>
-            {" "}
             [Embed]
           </button>
         </span>

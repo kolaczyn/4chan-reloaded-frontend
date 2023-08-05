@@ -1,13 +1,17 @@
 import { V2_MetaFunction } from "@remix-run/node";
-import { loader } from "~/routes/boards.($boardSlug).$threadId";
 
 type ChangelogItem = {
-  version: `${number}.${number}.${number}`;
-  date: `${number}.${number}.${number}`;
+  version: `${0}.${number}.${number}`;
+  date: `${number}.${number}.${2023}`;
   changes: string;
 };
 
 const changelog: ChangelogItem[] = [
+  {
+    version: "0.0.23",
+    date: "05.08.2023",
+    changes: "redesign posts",
+  },
   {
     version: "0.0.22",
     date: "05.08.2023",

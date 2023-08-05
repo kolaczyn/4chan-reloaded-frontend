@@ -1,6 +1,8 @@
 import { ReplyMessage } from "~/components/ReplyMessage/ReplyMessage";
-import { dateInfo, formatDateExtra } from "~/utils/formatDate";
 import type { ReplyDto } from "~/types";
+import { ReplyTitle } from "~/components/threadsReplies/ReplyTitle";
+
+const GRADIENT = "bg-gradient-to-r from-lime-50 to-orange-50";
 
 type Props = ReplyDto & {
   threadTitle: string | null;
@@ -22,26 +24,21 @@ export const ReplyCard = ({
   handleDelete,
 }: Props) => {
   return (
-    <>
+    <div className={`rounded-sm ${GRADIENT} border border-emerald-50`}>
       <span>
         {imageUrl && <img alt={threadTitle ?? undefined} src={imageUrl} />}
-        {isFirst && <b>{threadTitle} </b>}
-        <ReplyMessage message={message} />
+        <div className="px-2 py-1">
+          <ReplyTitle
+            id={id}
+            handleDelete={handleDelete}
+            createdAt={createdAt}
+            handleClickId={handleClickId}
+            isJanny={isJanny}
+          />
+          {isFirst && <b>{threadTitle} </b>}
+          <ReplyMessage message={message} />
+        </div>
       </span>
-      <span
-        className="opacity-60 cursor-pointer"
-        onClick={() => handleClickId(id)}
-      >
-        (no. {id}
-      </span>
-      {createdAt && (
-        <span title={formatDateExtra(createdAt)} className="opacity-60">
-          , {dateInfo(createdAt)}
-        </span>
-      )}
-      <span className="opacity-50">)</span>
-      {isJanny && <button onClick={() => handleDelete(id)}>Remove</button>}
-      <hr />
-    </>
+    </div>
   );
 };
