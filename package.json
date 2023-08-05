@@ -7,7 +7,7 @@
     "start": "remix-serve build",
     "types": "tsc",
     "test": "vitest run",
-    "ci": "run-p -l --aggregate-output build typecs test"
+    "ci": "run-p -l --aggregate-output build types test"
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.0.6",
