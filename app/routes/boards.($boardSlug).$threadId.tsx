@@ -12,7 +12,7 @@ import {
   useParams,
   useRevalidator,
 } from "@remix-run/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { AppLink } from "~/components/AppLink";
 import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
@@ -31,17 +31,18 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
 const addReplyAction = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message");
+  const imageUrl = formData.get("imageUrl");
 
   const res = await fetch(
     `${API_URL}/${params.boardSlug}/threads/${params.threadId}/replies`,
     {
       method: "post",
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, ...(imageUrl ? { imageUrl } : {}) }),
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
     }
-  ).then((res) => res.json());
+  ).then((x) => x.json());
 
   return res;
 };
@@ -84,10 +85,14 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 const ThreadPage = () => {
   const params = useParams();
   const revalidator = useRevalidator();
-  const { data, boardSlug, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+
+  const { data, boardSlug, isJanny } = useLoaderData<typeof loader>();
+
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const replyInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const isLoading =
     navigation.state === "loading" || revalidator.state === "loading";
@@ -145,13 +150,21 @@ const ThreadPage = () => {
         handleRefresh={() => revalidator.revalidate()}
       />
 
-      <div className="border-blue-100 border mt-3">
+      <div className="grid grid-cols-2 gap-2.5">
         <Form method="post">
+          <input
+            placeholder="Image url"
+            className="py-1 px-2 w-full"
+            name="imageUrl"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
           <textarea
             ref={replyInputRef}
             placeholder="Your reply..."
             name="message"
-            className="bg-gray-100 my-1"
+            rows={3}
+            className="my-1 w-full bg-gray-50 p-2"
           />
           <br />
           <button
@@ -162,6 +175,16 @@ const ThreadPage = () => {
             Reply
           </button>
         </Form>
+
+        {imageUrl ? (
+          <img
+            alt="The image could not be loaded. Make sure the link is okay"
+            src={imageUrl}
+            className="max-w-xs aspect-auto max-h-40"
+          />
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );

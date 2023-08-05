@@ -90,7 +90,7 @@ const BoardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
-  const [imageInputText, setImageInputText] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
@@ -154,7 +154,7 @@ const BoardPage = () => {
       </AppLinkExternal>
       <hr className="mt-3" />
 
-      <div className="mt-3 grid grid-cols-2">
+      <div className="mt-3 grid grid-cols-2 gap-2.5">
         <div>
           <h2 className="font-medium mb-2 text-lg">Start a new thread</h2>
           <Form method="POST">
@@ -174,8 +174,8 @@ const BoardPage = () => {
               id="image-url"
               className="bg-gray-100 my-1 d-block"
               name="image-url"
-              value={imageInputText}
-              onChange={(e) => setImageInputText(e.target.value)}
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
             />
             <br />
             <label htmlFor="message" className={"font-medium mr-2 block"}>
@@ -192,10 +192,10 @@ const BoardPage = () => {
             </button>
           </Form>
         </div>
-        {imageInputText ? (
+        {imageUrl ? (
           <img
-            alt="The image assigned to the thread"
-            src={imageInputText}
+            alt="The image could not be loaded. Make sure the link is okay"
+            src={imageUrl}
             className="max-w-xs aspect-auto max-h-40"
           />
         ) : (
