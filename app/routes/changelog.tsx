@@ -8,6 +8,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.24",
+    date: "05.08.2023",
+    changes: "add fullscreen on youtube, and make the video occupy full width",
+  },
+  {
     version: "0.0.23",
     date: "05.08.2023",
     changes: "redesign posts",

@@ -11,13 +11,15 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
     <>
       {isShowing ? (
         <>
-          <iframe
-            width="560"
-            height="315"
-            src={embedUrl}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          />{" "}
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              width="560"
+              height="315"
+              src={embedUrl}
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            />
+          </div>{" "}
           <button className="text-blue-500" onClick={() => setIsShowing(false)}>
             [Hide]
           </button>
