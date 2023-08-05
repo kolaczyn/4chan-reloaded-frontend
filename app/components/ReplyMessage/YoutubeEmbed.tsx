@@ -11,7 +11,7 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
     <>
       {isShowing ? (
         <>
-          <div className="aspect-w-16 aspect-h-9">
+          <div className="aspect-w-16 aspect-h-9 -mx-2">
             <iframe
               width="560"
               height="315"
