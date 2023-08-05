@@ -1,3 +1,6 @@
+import { V2_MetaFunction } from "@remix-run/node";
+import { loader } from "~/routes/boards.($boardSlug).$threadId";
+
 type ChangelogItem = {
   version: `${number}.${number}.${number}`;
   date: `${number}.${number}.${number}`;
@@ -151,5 +154,11 @@ const ChangelogPage = () => {
     </div>
   );
 };
+
+export const meta: V2_MetaFunction = () => [
+  {
+    title: "Changelog",
+  },
+];
 
 export default ChangelogPage;
