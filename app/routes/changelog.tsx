@@ -6,6 +6,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.0.20",
+    date: "05.08.2023",
+    changes: "improve loading speed by moving services closer together",
+  },
+  {
     version: "0.0.19",
     date: "05.08.2023",
     changes: "under the hood code improvements - no new features",
