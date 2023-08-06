@@ -176,7 +176,7 @@ const ChangelogPage = () => {
 
 export const meta: V2_MetaFunction = () => [
   {
-    title: "Changelog",
+    title: "Boards | Changelog",
   },
 ];
 
