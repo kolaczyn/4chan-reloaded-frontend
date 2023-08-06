@@ -7,6 +7,7 @@ import type { ThreadDto } from "~/types";
 import { API_URL } from "~/constants";
 import {
   Form,
+  useActionData,
   useLoaderData,
   useNavigation,
   useParams,
@@ -18,6 +19,12 @@ import { AppLink } from "~/components/AppLink";
 import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
 import { ReplyCard } from "~/components/threadsReplies/ReplyCard";
 import { Loader } from "~/components/Loader";
+import { urlPattern } from "~/utils/urlPattern";
+
+type ValidationErrors = {
+  message: string | null;
+  imageUrl: string | null;
+};
 
 export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
@@ -30,8 +37,28 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
 
 const addReplyAction = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
-  const message = formData.get("message");
+  const message = formData.get("message") ?? "";
   const imageUrl = formData.get("imageUrl");
+
+  let errs: ValidationErrors = {
+    message: null,
+    imageUrl: null,
+  };
+  if (message === "") {
+    errs.message = "Message can't be empty";
+  }
+
+  // image is optional, but if it's provided, it needs to be validated
+  if (imageUrl !== "" && !urlPattern.test(imageUrl as string)) {
+    errs.imageUrl = "Image URL is not valid";
+  }
+
+  if (errs.message || errs.imageUrl) {
+    return {
+      status: 400,
+      json: errs,
+    };
+  }
 
   const res = await fetch(
     `${API_URL}/${params.boardSlug}/threads/${params.threadId}/replies`,
@@ -84,6 +111,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 
 const ThreadPage = () => {
   const params = useParams();
+  const actionData = useActionData<typeof action>();
   const revalidator = useRevalidator();
   const navigation = useNavigation();
 
@@ -150,25 +178,44 @@ const ThreadPage = () => {
         handleRefresh={() => revalidator.revalidate()}
       />
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-2.5 mb-32">
         <Form method="post">
+          <label htmlFor="imageUrl" className="font-medium mr-2 block mt-2">
+            Image url: <span className="text-gray-400 text-sm">(optional)</span>
+          </label>
           <input
             placeholder="Image url"
-            className="py-1 px-2 w-full"
+            className="py-1 px-2 w-full mt-2"
+            id="imageUrl"
             name="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
+          {actionData?.json?.imageUrl && (
+            <div className="text-red-400 text-sm mt-1">
+              {actionData.json.imageUrl}
+            </div>
+          )}
+
+          <label htmlFor="message" className="font-medium mr-2 block mt-2">
+            Message: <span className="text-gray-400 text-sm">(required)</span>
+          </label>
           <textarea
             ref={replyInputRef}
             placeholder="Your reply..."
+            id="message"
             name="message"
             rows={3}
-            className="my-1 w-full bg-gray-50 p-2"
+            className="my-1 w-full bg-gray-50 p-2 mt-2"
           />
-          <br />
+          {actionData?.json?.message && (
+            <div className="text-red-400 text-sm">
+              {actionData.json.message}
+            </div>
+          )}
+
           <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer mt-2"
             type="submit"
             disabled={navigation.state === "submitting"}
           >

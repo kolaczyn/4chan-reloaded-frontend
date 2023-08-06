@@ -1,4 +1,4 @@
-import { V2_MetaFunction } from "@remix-run/node";
+import type { V2_MetaFunction } from "@remix-run/node";
 
 type ChangelogItem = {
   version: `${0}.${number}.${number}`;
@@ -7,6 +7,11 @@ type ChangelogItem = {
 };
 
 const changelog: ChangelogItem[] = [
+  {
+    version: "0.0.25",
+    date: "06.08.2023",
+    changes: "show validation errors when creating a post",
+  },
   {
     version: "0.0.24",
     date: "05.08.2023",

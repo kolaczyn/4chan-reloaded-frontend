@@ -9,6 +9,7 @@ import {
   useLoaderData,
   useNavigation,
   useSearchParams,
+  useActionData,
 } from "@remix-run/react";
 import type {
   BoardsThreadsDto,
@@ -27,6 +28,7 @@ import { ThreadTeaser } from "~/components/boardsThreads/ThreadTeaser";
 import { AppLink } from "~/components/AppLink";
 import { AppLinkExternal } from "~/components/AppLinkExternal";
 import { Loader } from "~/components/Loader";
+import { urlPattern } from "~/utils/urlPattern";
 
 const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
@@ -54,17 +56,45 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
   return { isJanny, boardsThreads: res };
 };
 
-const urlPattern =
-  /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+type FormValidationErrors = {
+  message: string | null;
+  title: string | null;
+  imageUrl: string | null;
+};
 
 export const action = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
-  const message = formData.get("message");
-  const title = formData.get("title") || undefined;
-  const imageUrl = formData.get("image-url") || undefined;
+  const message = formData.get("message") ?? "";
+  const title = formData.get("title") ?? "";
+  const imageUrl = formData.get("image-url") ?? "";
 
-  if (!message || !title || !imageUrl) return null;
-  if (!urlPattern.test(imageUrl as string)) return null;
+  let errs: FormValidationErrors = {
+    message: null,
+    title: null,
+    imageUrl: null,
+  };
+
+  if (message === "") {
+    errs.message = "Message can't be empty";
+  }
+  if (title === "") {
+    errs.title = "Title can't be empty";
+  }
+  if (!urlPattern.test(imageUrl as string)) {
+    errs.imageUrl = "Image URL is not valid";
+  }
+  if (imageUrl === "") {
+    errs.imageUrl = "Image can't be empty when creating a new thread";
+  }
+
+  if (errs.message || errs.title || errs.imageUrl) {
+    return new Response(JSON.stringify(errs), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    });
+  }
 
   const result = await fetch(`${API_URL}/${params.boardSlug}/threads`, {
     method: "post",
@@ -87,6 +117,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
 };
 
 const BoardPage = () => {
+  const actionData = useActionData<FormValidationErrors>();
   const [searchParams, setSearchParams] = useSearchParams();
   const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
@@ -158,31 +189,48 @@ const BoardPage = () => {
         <div>
           <h2 className="font-medium mb-2 text-lg">Start a new thread</h2>
           <Form method="POST">
-            <label htmlFor="title" className="font-medium mr-2 block">
+            <label htmlFor="title" className="font-medium mr-2 block mt-2">
               Title: <span className="text-gray-400 text-sm">(required)</span>
             </label>
             <input
               id="title"
-              className="bg-gray-100 my-1 d-block"
+              className="bg-gray-50 my-1 d-block w-full"
               name="title"
             />
-            <label htmlFor="image-url" className="font-medium mr-2 block">
+            {actionData?.title && (
+              <div className="text-red-400 text-sm">{actionData.title}</div>
+            )}
+
+            <label htmlFor="image-url" className="font-medium mr-2 block mt-2">
               Image url:{" "}
               <span className="text-gray-400 text-sm">(required)</span>
             </label>
             <input
               id="image-url"
-              className="bg-gray-100 my-1 d-block"
+              className="bg-gray-50 my-1 d-block w-full"
               name="image-url"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
             />
-            <br />
-            <label htmlFor="message" className={"font-medium mr-2 block"}>
+            {actionData?.imageUrl && (
+              <div className="text-red-400 text-sm">{actionData.imageUrl}</div>
+            )}
+
+            <label htmlFor="message" className="font-medium mr-2 block mt-2">
               Message: <span className="text-gray-400 text-sm">(required)</span>
             </label>
-            <textarea className="bg-gray-100 my-1" name="message" />
-            <br />
+            <textarea
+              id="message"
+              className="bg-gray-50 my-1 w-full"
+              name="message"
+              rows={3}
+            />
+            {actionData?.message && (
+              <div className="text-red-400 text-sm mt-0.5">
+                {actionData.message}
+              </div>
+            )}
+
             <button
               className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
               disabled={navigation.state === "submitting"}
