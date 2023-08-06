@@ -120,7 +120,9 @@ const ThreadPage = () => {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const replyInputRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const [messageText, setMessageText] = useState("");
   const [imageUrl, setImageUrl] = useState<string>("");
+  const $form = useRef<HTMLFormElement | null>(null);
 
   const isLoading =
     navigation.state === "loading" || revalidator.state === "loading";
@@ -178,61 +180,65 @@ const ThreadPage = () => {
         handleRefresh={() => revalidator.revalidate()}
       />
 
-      <div className="grid grid-cols-2 gap-2.5 mb-32">
-        <Form method="post">
-          <label htmlFor="imageUrl" className="font-medium mr-2 block mt-2">
-            Image url: <span className="text-gray-400 text-sm">(optional)</span>
-          </label>
-          <input
-            placeholder="Image url"
-            className="py-1 px-2 w-full mt-2"
-            id="imageUrl"
-            name="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          {actionData?.json?.imageUrl && (
-            <div className="text-red-400 text-sm mt-1">
-              {actionData.json.imageUrl}
-            </div>
-          )}
-
-          <label htmlFor="message" className="font-medium mr-2 block mt-2">
-            Message: <span className="text-gray-400 text-sm">(required)</span>
-          </label>
-          <textarea
-            ref={replyInputRef}
-            placeholder="Your reply..."
-            id="message"
-            name="message"
-            rows={3}
-            className="my-1 w-full bg-gray-50 p-2 mt-2"
-          />
-          {actionData?.json?.message && (
-            <div className="text-red-400 text-sm">
-              {actionData.json.message}
-            </div>
-          )}
-
-          <button
-            className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer mt-2"
-            type="submit"
-            disabled={navigation.state === "submitting"}
-          >
-            Reply
-          </button>
-        </Form>
-
-        {imageUrl ? (
-          <img
-            alt="The image could not be loaded. Make sure the link is okay"
-            src={imageUrl}
-            className="max-w-xs aspect-auto max-h-40"
-          />
-        ) : (
-          <div />
+      <Form ref={$form} method="post">
+        <label htmlFor="imageUrl" className="font-medium mr-2 block mt-2">
+          Image url: <span className="text-gray-400 text-sm">(optional)</span>
+        </label>
+        <input
+          placeholder="Image url"
+          className="py-1 px-2 w-full mt-2"
+          id="imageUrl"
+          name="imageUrl"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+        />
+        {actionData?.json?.imageUrl && (
+          <div className="text-red-400 text-sm mt-1">
+            {actionData.json.imageUrl}
+          </div>
         )}
-      </div>
+
+        <label htmlFor="message" className="font-medium mr-2 block mt-2">
+          Message: <span className="text-gray-400 text-sm">(required)</span>
+        </label>
+        <textarea
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
+          placeholder="Your reply..."
+          id="message"
+          name="message"
+          rows={3}
+          className="my-1 w-full bg-gray-50 p-2 mt-2"
+        />
+        {actionData?.json?.message && (
+          <div className="text-red-400 text-sm">{actionData.json.message}</div>
+        )}
+
+        <button
+          className="bg-blue-100 rounded-sm hover:bg-blue-200 transition-colors px-2 py-1 cursor-pointer mt-2"
+          type="submit"
+          disabled={navigation.state === "submitting"}
+        >
+          Reply
+        </button>
+      </Form>
+
+      {(messageText || imageUrl) && (
+        <div className="mb-32 mt-4">
+          <div className="font-medium mb-2">Preview:</div>
+          <ReplyCard
+            message={messageText}
+            createdAt={null}
+            id={1234}
+            imageUrl={imageUrl}
+            threadTitle={""}
+            isFirst={false}
+            handleClickId={() => {}}
+            isJanny={false}
+            handleDelete={() => {}}
+          />
+        </div>
+      )}
     </div>
   );
 };
