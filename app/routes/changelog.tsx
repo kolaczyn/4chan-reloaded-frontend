@@ -8,6 +8,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.27.0",
+    date: "07.08.2023",
+    changes: "breadcrumbs for improved navigation",
+  },
+  {
     version: "0.26.1",
     date: "07.08.2023",
     changes: "fix not auto filling reply id when replying to a post",

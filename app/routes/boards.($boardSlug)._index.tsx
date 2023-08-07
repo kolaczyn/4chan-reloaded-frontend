@@ -147,11 +147,12 @@ const BoardPage = () => {
 
   return (
     <AppContainer>
-      <div className="space-x-3 flex mb-3">
-        <h1>
-          /{data.slug}/ - {data.name}
-        </h1>
-        <AppLink href="/">Back</AppLink>
+      <div className="space-x-3 flex mb-3 items-center font-bold">
+        <div className="text-2xl">
+          <AppLink href="/">Boards</AppLink>
+        </div>
+        <div className="text-xl">›</div>
+        <h1>/{data.slug}/</h1>
       </div>
 
       {!!data.threads.length && (

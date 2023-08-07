@@ -146,7 +146,16 @@ const ThreadPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto py-4">
-      <AppLink href={`/boards/${boardSlug}`}>Back</AppLink>
+      <div className="space-x-3 flex mb-3 items-center font-bold">
+        <div className="text-2xl">
+          <AppLink href="/">Boards</AppLink>
+        </div>
+        <div className="text-xl">›</div>
+        <AppLink href={`/boards/${boardSlug}`}>/{boardSlug}/</AppLink>
+        <div className="text-xl">›</div>
+        <div>Thread #{data.id}</div>
+      </div>
+
       <ul className="mt-2">
         <Loader isLoading={isLoading}>
           {data.replies.map((x, idx) => (

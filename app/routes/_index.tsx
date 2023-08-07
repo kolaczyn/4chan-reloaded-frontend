@@ -27,7 +27,7 @@ const HomePage = () => {
 
   return (
     <AppContainer>
-      <h1 className="text-3xl">Boards</h1>
+      <h1 className="text-2xl font-bold">Boards</h1>
       <ul className="my-5">
         {boards.map((x) => (
           <li key={x.slug}>
