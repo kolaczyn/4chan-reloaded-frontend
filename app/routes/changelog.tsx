@@ -1,4 +1,6 @@
 import type { V2_MetaFunction } from "@remix-run/node";
+import { AppLink } from "~/components/AppLink";
+import { AppContainer } from "~/components/layout/AppContainer";
 
 type ChangelogItem = {
   version: `${0}.${number}.${number}`;
@@ -7,6 +9,11 @@ type ChangelogItem = {
 };
 
 const changelog: ChangelogItem[] = [
+  {
+    version: "0.28.0",
+    date: "07.08.2023",
+    changes: "add /about page",
+  },
   {
     version: "0.27.0",
     date: "07.08.2023",
@@ -107,7 +114,7 @@ const changelog: ChangelogItem[] = [
     version: "0.11.0",
     date: "03.08.2023",
     changes:
-      "add images (single image per thread). Also fix crashing if a title is not provided",
+      "add images (only one per thread). Fix crashing if title is not provided",
   },
   {
     version: "0.10.0",
@@ -160,29 +167,28 @@ const changelog: ChangelogItem[] = [
     version: "0.0.0",
     date: "30.07.2023",
     changes:
-      "initial version of the service - added boards, threads and replies with text only",
+      "initial version: added boards, threads and replies with text only",
   },
 ];
 
-const ChangelogPage = () => {
-  return (
-    <div className="max-w-3xl mx-auto py-4">
-      <div className="flex justify-between items-center mb-5">
-        <h1 className="text-4xl font-bold">Changelog</h1>
-        <a className="text-blue-500 hover:underline" href="/">
-          Back
-        </a>
+const ChangelogPage = () => (
+  <AppContainer>
+    <div className="space-x-3 flex mb-3 items-center font-bold">
+      <div className="text-2xl">
+        <AppLink href="/">Boards</AppLink>
       </div>
-      <ul className="list-disc list-inside">
-        {changelog.map((x) => (
-          <li key={x.version}>
-            <b>{x.version}</b>, {x.date} - {x.changes}
-          </li>
-        ))}
-      </ul>
+      <div className="text-xl">›</div>
+      <div>Changelog</div>
     </div>
-  );
-};
+    <ul className="list-disc list-inside">
+      {changelog.map((x) => (
+        <li key={x.version}>
+          <b>{x.version}</b>, {x.date.replace(".2023", "")}: {x.changes}
+        </li>
+      ))}
+    </ul>
+  </AppContainer>
+);
 
 export const meta: V2_MetaFunction = () => [
   {
