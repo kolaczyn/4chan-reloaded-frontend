@@ -10,6 +10,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.29.0",
+    date: "08.08.2023",
+    changes: "show YouTube video preview by hovering over [embed]",
+  },
+  {
     version: "0.28.0",
     date: "07.08.2023",
     changes: "add /about page",

@@ -1,4 +1,13 @@
 import { useState } from "react";
+import { ImagePreview } from "~/components/ReplyMessage/ImagePreview";
+
+const regExp =
+  /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+const getPreviewUrl = (url: string) => {
+  const match = url.match(regExp);
+  const videoId = match && match[7].length === 11 ? match[7] : null;
+  return `https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`;
+};
 
 type Props = {
   embedUrl: string;
@@ -27,9 +36,14 @@ export const YoutubeEmbed = ({ embedUrl, url }: Props) => {
       ) : (
         <span>
           <span>{url}</span>{" "}
-          <button className="text-blue-500" onClick={() => setIsShowing(true)}>
-            [Embed]
-          </button>
+          <ImagePreview url={getPreviewUrl(url)}>
+            <button
+              className="text-blue-500"
+              onClick={() => setIsShowing(true)}
+            >
+              [Embed]
+            </button>
+          </ImagePreview>
         </span>
       )}
     </>
