@@ -1,6 +1,7 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { AppContainer } from "~/components/layout/AppContainer";
 import { AppLink } from "~/components/AppLink";
+import { AppLinkExternal } from "~/components/AppLinkExternal";
 
 export const meta: V2_MetaFunction = () => [
   {
@@ -88,6 +89,39 @@ const AboutPage = () => (
       fostering meaningful discussions and connections. Together, let's create
       something extraordinary!
     </p>
+    <h3 className="text-xl font-bold mt-2">Links</h3>
+    <ul className="list-disc list-inside">
+      <li>
+        <AppLinkExternal href="https://kolaczyn.com">
+          Personal Website
+        </AppLinkExternal>
+      </li>
+      <li>
+        <AppLinkExternal href="https://github.com/users/kolaczyn/projects/3">
+          Kanban Board
+        </AppLinkExternal>
+      </li>
+      <li>
+        <AppLinkExternal href="https://github.com/kolaczyn/boards-frontend">
+          Frontend Code
+        </AppLinkExternal>
+      </li>
+      <li>
+        <AppLinkExternal href="https://github.com/kolaczyn/boards-backend">
+          Core Backend Code
+        </AppLinkExternal>
+      </li>
+      <li>
+        <AppLinkExternal href="https://github.com/kolaczyn/boards-feeds">
+          Feeds Backend Code
+        </AppLinkExternal>
+      </li>
+      <li>
+        <AppLinkExternal href="https://github.com/kolaczyn/boards-android">
+          Android Code
+        </AppLinkExternal>
+      </li>
+    </ul>
     <div className="mb-12" />
   </AppContainer>
 );
