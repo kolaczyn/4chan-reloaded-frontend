@@ -13,6 +13,15 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
+const smartlookScript = `
+window.smartlook||(function(d) {
+var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
+})(document);
+smartlook('init', '58863f93b684d5738ffc5b40639ab4ad29656d96', { region: 'eu' });
+`;
+
 export default function App() {
   return (
     <html lang="en">
@@ -23,25 +32,8 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-gradient-to-t from-neutral-100 via-gray-100 to-cyan-100 min-h-screen">
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=g-56d7jf291s"
-        />
-        <script
-          async
-          id="gtag-init"
-          dangerouslySetInnerHTML={{
-            __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
+        <script dangerouslySetInnerHTML={{ __html: smartlookScript }} />
 
-                gtag('config', '56d7jf291s', {
-                  page_path: window.location.pathname,
-                });
-              `,
-          }}
-        />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
