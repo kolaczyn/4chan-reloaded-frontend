@@ -17,9 +17,9 @@ const AboutPage = () => (
       <div className="text-xl">›</div>
       <div>About</div>
     </div>
-    <h1 className="text-2xl font-bold"> Introduction: </h1>
+    <h1 className="text-2xl font-bold"> Introduction</h1>
     <p>Welcome to "Boards" - Your Personal Messageboard Experience!</p>
-    <h2 className="text-xl font-bold mt-2">About the Project:</h2>
+    <h2 className="text-xl font-bold mt-2">About the Project</h2>
     <p>
       "Boards" is a personal project, created and developed by a passionate
       individual seeking to expand their programming skills in .NET and Kotlin,
@@ -31,7 +31,7 @@ const AboutPage = () => (
       dynamic and interactive space for discussions, content sharing, and
       connecting with like-minded individuals.
     </p>
-    <h3 className="text-xl font-bold mt-2"> Changelog Page </h3>
+    <h3 className="text-xl font-bold mt-2"> Changelog Page</h3>
     <p>
       Stay updated with the latest changes and improvements to the "Boards"
       platform through our <AppLink href="/changelog">Changelog </AppLink>
@@ -39,14 +39,14 @@ const AboutPage = () => (
       your valuable feedback will shape the growth and enhancements of "Boards"
       over time.
     </p>
-    <h3 className="text-xl font-bold mt-2">Unmoderated Environment:</h3>
+    <h3 className="text-xl font-bold mt-2">Unmoderated Environment</h3>
     <p>
       It's important to keep in mind that "Boards" is a personal project and is
       not heavily moderated. While we encourage respectful interactions, users
       should exercise discretion while browsing and participating in
       discussions.
     </p>
-    <h3 className="text-xl font-bold mt-2">Key Features:</h3>
+    <h3 className="text-xl font-bold mt-2">Key Features</h3>
     <ul className="list-disc list-inside">
       <li>
         <b>Multiple boards</b> - "Boards" features a diverse range of boards,
@@ -68,7 +68,7 @@ const AboutPage = () => (
         flow of conversations.
       </li>
     </ul>
-    <h3 className="text-xl font-bold mt-2">Future Development:</h3>
+    <h3 className="text-xl font-bold mt-2">Future Development</h3>
     <p>
       As a solo developer, I'm dedicated to continuously improving "Boards" to
       provide you with the best user experience possible. Your feedback and
