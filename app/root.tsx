@@ -23,6 +23,25 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-gradient-to-t from-neutral-100 via-gray-100 to-cyan-100 min-h-screen">
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=g-56d7jf291s"
+        />
+        <script
+          async
+          id="gtag-init"
+          dangerouslySetInnerHTML={{
+            __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '56d7jf291s', {
+                  page_path: window.location.pathname,
+                });
+              `,
+          }}
+        />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
