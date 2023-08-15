@@ -36,7 +36,15 @@ export const ReplyCard = ({
             isJanny={isJanny}
           />
           {isFirst && <b>{threadTitle} </b>}
-          <ReplyMessage message={message} />
+          {message.split("\n").map((line, idx) => (
+            <div
+              className={line.startsWith(">") ? "text-[#789922]" : ""}
+              key={idx}
+            >
+              <ReplyMessage message={line} />
+              <br />
+            </div>
+          ))}
         </div>
       </span>
     </div>

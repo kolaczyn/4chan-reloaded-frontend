@@ -10,6 +10,12 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.29.1",
+    date: "15.08.2023",
+    changes:
+      "correctly display text with line breaks. Make greentext span the whole line",
+  },
+  {
     version: "0.29.0",
     date: "08.08.2023",
     changes: "show YouTube video preview by hovering over [embed]",

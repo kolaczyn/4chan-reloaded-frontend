@@ -15,7 +15,6 @@ const ReplyText = ({ text }: { text: string }) => {
 
   const isQuote = text.startsWith(">>");
   const quoteId = text.replace(">>", "");
-  const isGreentext = text.startsWith(">") && !isQuote;
 
   useEffect(() => {
     const element = document.getElementById(quoteId);
@@ -29,7 +28,6 @@ const ReplyText = ({ text }: { text: string }) => {
 
   const getColor = () => {
     if (isQuote) return "#d00";
-    if (isGreentext) return "#789922";
     return "";
   };
 
@@ -71,7 +69,7 @@ const ReplyText = ({ text }: { text: string }) => {
 };
 
 export const ReplyMessage = ({ message }: Props) => {
-  const words = message.split(/\s+|\n+/);
+  const words = message.split(/\s+/);
 
   // using idx as key - not perfect but good enough for now
   return words.map((x, idx) => {
