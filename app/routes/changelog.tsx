@@ -10,6 +10,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "1.2.0",
+    date: "15.08.2023",
+    changes: "add link for feature requests. Show footer on most pages",
+  },
+  {
     version: "1.1.1",
     date: "15.08.2023",
     changes: "a line is no longer greentext if it starts with >>",
@@ -189,7 +194,11 @@ const changelog: ChangelogItem[] = [
     date: "01.08.2023",
     changes: "added pagination for threads of a board",
   },
-  // I missed 0.0.2, but whatever :p
+  {
+    version: "0.2.0",
+    date: "01.08.2023",
+    changes: "i accidentally skipped this version, so lol",
+  },
   {
     version: "0.1.0",
     date: "31.07.2023",

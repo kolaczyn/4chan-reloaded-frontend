@@ -127,7 +127,6 @@ const AboutPage = () => (
         </AppLinkExternal>
       </li>
     </ul>
-    <div className="mb-12" />
   </AppContainer>
 );
 

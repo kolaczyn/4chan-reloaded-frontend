@@ -4,7 +4,6 @@ import { useLoaderData } from "@remix-run/react";
 import { API_URL_V2 } from "~/constants";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
 import { BoardLink } from "~/components/Home/BoardLink";
-import { HomeFooter } from "~/components/Home/HomeFooter";
 import { AppContainer } from "~/components/layout/AppContainer";
 
 export const loader = async ({ request }: DataFunctionArgs) => {
@@ -45,8 +44,6 @@ const HomePage = () => {
           </li>
         ))}
       </ul>
-      <hr className="mb-2" />
-      <HomeFooter isJanny={isJanny} />
     </AppContainer>
   );
 };
