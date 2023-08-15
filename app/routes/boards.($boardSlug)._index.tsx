@@ -1,4 +1,4 @@
-import { API_URL } from "~/constants";
+import { API_URL_V1 } from "~/constants";
 import type {
   ActionArgs,
   DataFunctionArgs,
@@ -51,7 +51,7 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
     sortOrder,
   };
   const res: BoardsThreadsDto = await fetch(
-    `${API_URL}/${boardSlug}?${toQueryString(query)}`
+    `${API_URL_V1}/${boardSlug}?${toQueryString(query)}`
   ).then((res) => res.json());
   return { isJanny, boardsThreads: res };
 };
@@ -96,7 +96,7 @@ export const action = async ({ request, params }: ActionArgs) => {
     });
   }
 
-  const result = await fetch(`${API_URL}/${params.boardSlug}/threads`, {
+  const result = await fetch(`${API_URL_V1}/${params.boardSlug}/threads`, {
     method: "post",
     body: JSON.stringify({ message, title, imageUrl }),
     headers: {

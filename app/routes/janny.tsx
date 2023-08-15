@@ -1,7 +1,7 @@
 import { Form, useNavigation } from "@remix-run/react";
 import { useRef } from "react";
 import type { ActionArgs } from "@remix-run/node";
-import { API_URL } from "~/constants";
+import { API_URL_V1 } from "~/constants";
 import { jannyCookie } from "~/routes/jannyCookie";
 
 export const action = async ({ request }: ActionArgs) => {
@@ -10,7 +10,7 @@ export const action = async ({ request }: ActionArgs) => {
   const name = formData.get("name");
   const password = formData.get("password");
 
-  await fetch(API_URL, {
+  await fetch(API_URL_V1, {
     method: "post",
     body: JSON.stringify({ slug, name, password }),
     headers: {

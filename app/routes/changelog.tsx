@@ -10,6 +10,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "1.1.0",
+    date: "15.08.2023",
+    changes: "more boards. Boards are grouped into categories",
+  },
+  {
     version: "1.0.0",
     date: "15.08.2023",
     changes:

@@ -4,7 +4,7 @@ import type {
   V2_MetaFunction,
 } from "@remix-run/node";
 import type { ThreadDto } from "~/types";
-import { API_URL } from "~/constants";
+import { API_URL_V1 } from "~/constants";
 import {
   Form,
   useActionData,
@@ -30,7 +30,7 @@ export const loader = async ({ params, request }: DataFunctionArgs) => {
   const { boardSlug, threadId } = params;
   const isJanny = await getIsJannyFromCookie(request);
   const res: ThreadDto = await fetch(
-    `${API_URL}/${boardSlug}/threads/${threadId}`
+    `${API_URL_V1}/${boardSlug}/threads/${threadId}`
   ).then((res) => res.json());
   return { data: res, boardSlug, isJanny };
 };
@@ -61,7 +61,7 @@ const addReplyAction = async ({ request, params }: ActionArgs) => {
   }
 
   const res = await fetch(
-    `${API_URL}/${params.boardSlug}/threads/${params.threadId}/replies`,
+    `${API_URL_V1}/${params.boardSlug}/threads/${params.threadId}/replies`,
     {
       method: "post",
       body: JSON.stringify({ message, ...(imageUrl ? { imageUrl } : {}) }),
@@ -81,7 +81,7 @@ const deleteReplyAction = async (
   password: string
 ) => {
   const res = await fetch(
-    `${API_URL}/${boardSlug}/threads/${threadId}/replies/${replyId}`,
+    `${API_URL_V1}/${boardSlug}/threads/${threadId}/replies/${replyId}`,
     {
       method: "delete",
       body: JSON.stringify({ password }),

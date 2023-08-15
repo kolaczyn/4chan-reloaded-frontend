@@ -3,6 +3,12 @@ export type BoardDto = {
   name: string;
 };
 
+export type CategoriesBoardsDto = {
+  id: number;
+  name: string;
+  boards: BoardDto[];
+};
+
 export type ThreadTeaserDto = {
   id: number;
   message: string;
