@@ -117,6 +117,11 @@ const AboutPage = () => (
         </AppLinkExternal>
       </li>
       <li>
+        <AppLinkExternal href="https://github.com/kolaczyn/boards-discord">
+          Discord Bot Code
+        </AppLinkExternal>
+      </li>
+      <li>
         <AppLinkExternal href="https://github.com/kolaczyn/boards-android">
           Android Code
         </AppLinkExternal>
