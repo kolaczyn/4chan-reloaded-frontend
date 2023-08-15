@@ -10,6 +10,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "0.29.2",
+    date: "15.08.2023",
+    changes: "always show scrollbar to minimize layout shifts",
+  },
+  {
     version: "0.29.1",
     date: "15.08.2023",
     changes:

@@ -31,7 +31,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-gradient-to-t from-neutral-100 via-gray-100 to-cyan-100 min-h-screen">
+      <body className="bg-gradient-to-t from-neutral-100 via-gray-100 to-cyan-100 min-h-screen overflow-y-scroll">
         <script dangerouslySetInnerHTML={{ __html: smartlookScript }} />
 
         <Outlet />
