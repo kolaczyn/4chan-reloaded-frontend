@@ -11,4 +11,9 @@ describe("isGreentext", () => {
     expect(isGreentext("")).toBe(false);
     expect(isGreentext("tfw no gf")).toBe(false);
   });
+
+  it("should return false if text starts with >>", () => {
+    expect(isGreentext(">>")).toBe(false);
+    expect(isGreentext(">>tfw no gf")).toBe(false);
+  });
 });

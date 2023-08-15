@@ -1,6 +1,7 @@
 import { ReplyMessage } from "~/components/ReplyMessage/ReplyMessage";
 import type { ReplyDto } from "~/types";
 import { ReplyTitle } from "~/components/threadsReplies/ReplyTitle";
+import { isGreentext } from "~/components/threadsReplies/isGreentext";
 
 const GRADIENT = "bg-gradient-to-r from-lime-50 to-orange-50";
 
@@ -38,7 +39,7 @@ export const ReplyCard = ({
           {isFirst && <b>{threadTitle} </b>}
           {message.split("\n").map((line, idx) => (
             <div
-              className={line.startsWith(">") ? "text-[#789922]" : ""}
+              className={isGreentext(line) ? "text-[#789922]" : ""}
               key={idx}
             >
               <ReplyMessage message={line} />

@@ -1,7 +1,7 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { AppContainer } from "~/components/layout/AppContainer";
-import { AppLink } from "~/components/AppLink";
-import { AppLinkExternal } from "~/components/AppLinkExternal";
+import { AppLink } from "~/components/ui/AppLink";
+import { AppLinkExternal } from "~/components/ui/AppLinkExternal";
 
 export const meta: V2_MetaFunction = () => [
   {

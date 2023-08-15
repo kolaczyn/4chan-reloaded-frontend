@@ -1,4 +1,4 @@
-import { AppLinkExternal } from "~/components/AppLinkExternal";
+import { AppLinkExternal } from "~/components/ui/AppLinkExternal";
 
 type Props = {
   rssFeedUrl: string;

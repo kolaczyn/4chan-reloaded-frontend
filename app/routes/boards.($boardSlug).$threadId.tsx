@@ -15,10 +15,10 @@ import {
 } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { getIsJannyFromCookie } from "~/utils/getIsJannyFromCookie";
-import { AppLink } from "~/components/AppLink";
+import { AppLink } from "~/components/ui/AppLink";
 import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
 import { ReplyCard } from "~/components/threadsReplies/ReplyCard";
-import { Loader } from "~/components/Loader";
+import { Loader } from "~/components/ui/Loader";
 import { urlPattern } from "~/utils/urlPattern";
 
 type ValidationErrors = {

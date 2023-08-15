@@ -1,5 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { AppLink } from "~/components/AppLink";
+import { AppLink } from "~/components/ui/AppLink";
 import { AppContainer } from "~/components/layout/AppContainer";
 
 type ChangelogItem = {
@@ -9,6 +9,11 @@ type ChangelogItem = {
 };
 
 const changelog: ChangelogItem[] = [
+  {
+    version: "1.1.1",
+    date: "15.08.2023",
+    changes: "a line is no longer greentext if it starts with >>",
+  },
   {
     version: "1.1.0",
     date: "15.08.2023",

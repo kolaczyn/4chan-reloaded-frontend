@@ -25,9 +25,9 @@ import { AppContainer } from "~/components/layout/AppContainer";
 import { SortOptions } from "~/components/boardsThreads/SortOptions";
 import { Pagination } from "~/components/boardsThreads/Pagination";
 import { ThreadTeaser } from "~/components/boardsThreads/ThreadTeaser";
-import { AppLink } from "~/components/AppLink";
-import { AppLinkExternal } from "~/components/AppLinkExternal";
-import { Loader } from "~/components/Loader";
+import { AppLink } from "~/components/ui/AppLink";
+import { AppLinkExternal } from "~/components/ui/AppLinkExternal";
+import { Loader } from "~/components/ui/Loader";
 import { urlPattern } from "~/utils/urlPattern";
 
 const PAGE_SIZE = 24;

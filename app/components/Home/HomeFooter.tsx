@@ -1,4 +1,4 @@
-import { AppLink } from "~/components/AppLink";
+import { AppLink } from "~/components/ui/AppLink";
 
 type Props = {
   isJanny: boolean;

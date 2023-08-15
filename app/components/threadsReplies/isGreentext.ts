@@ -1,1 +1,2 @@
-export const isGreentext = (text: string) => text.startsWith(">");
+export const isGreentext = (text: string) =>
+  text.startsWith(">") && !text.startsWith(">>");
