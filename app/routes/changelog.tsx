@@ -3,12 +3,18 @@ import { AppLink } from "~/components/AppLink";
 import { AppContainer } from "~/components/layout/AppContainer";
 
 type ChangelogItem = {
-  version: `${0}.${number}.${number}`;
+  version: `${0 | 1}.${number}.${number}`;
   date: `${number}.${number}.${2023}`;
   changes: string;
 };
 
 const changelog: ChangelogItem[] = [
+  {
+    version: "1.0.0",
+    date: "15.08.2023",
+    changes:
+      "rename website to 'boards' and host it on https://boards.kolaczyn.com",
+  },
   {
     version: "0.29.2",
     date: "15.08.2023",
