@@ -67,6 +67,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   const message = formData.get("message") ?? "";
   const title = formData.get("title") ?? "";
   const imageUrl = formData.get("image-url") ?? "";
+  const tripcode = formData.get("tripcode") ?? "";
 
   let errs: FormValidationErrors = {
     message: null,
@@ -96,9 +97,18 @@ export const action = async ({ request, params }: ActionArgs) => {
     });
   }
 
+  let payload: any = {
+    message,
+    title,
+    imageUrl,
+  };
+  if (tripcode !== "") {
+    payload.tripcode = tripcode;
+  }
+
   const result = await fetch(`${API_URL_V1}/${params.boardSlug}/threads`, {
     method: "post",
-    body: JSON.stringify({ message, title, imageUrl }),
+    body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
@@ -122,6 +132,12 @@ const BoardPage = () => {
   const { boardsThreads: data, isJanny } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const [imageUrl, setImageUrl] = useState("");
+  const [tripcode, setTripcode] = useState("");
+
+  const isTripcodeValid = () => {
+    const [name, password] = tripcode.split("#");
+    return name?.length > 0 && password?.length > 0;
+  };
 
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
@@ -232,8 +248,28 @@ const BoardPage = () => {
               </div>
             )}
 
+            <label htmlFor="tripcode" className="font-medium mr-2 block mt-2">
+              Tripcode:{" "}
+              <span className="text-gray-400 text-sm">(optional)</span>
+            </label>
+            <input
+              value={tripcode}
+              onChange={(e) => setTripcode(e.target.value)}
+              id="tripcode"
+              className="bg-gray-50 my-1 d-block w-full"
+              name="tripcode"
+            />
+            <div className="text-gray-400 text-sm">
+              Tripcode must follow this format: name#password
+            </div>
+            {isTripcodeValid() && (
+              <div className="text-gray-400 text-sm mt-1">
+                ✔️ The format is good
+              </div>
+            )}
+
             <button
-              className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer"
+              className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 cursor-pointer mt-3"
               disabled={navigation.state === "submitting"}
               type="submit"
             >

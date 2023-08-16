@@ -236,6 +236,7 @@ const ThreadPage = () => {
         <div className="mb-32 mt-4">
           <div className="font-medium mb-2">Preview:</div>
           <ReplyCard
+            tripcode="Anonymous"
             message={messageText}
             createdAt={null}
             id={1234}

@@ -28,6 +28,7 @@ export type ReplyDto = {
   createdAt: string | null;
   id: number;
   imageUrl: string | null;
+  tripcode: string | null;
 };
 
 export type ThreadDto = {

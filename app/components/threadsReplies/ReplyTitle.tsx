@@ -1,4 +1,5 @@
 import { dateInfo, formatDateExtra } from "~/utils/formatDate";
+import { truncateStr } from "~/utils/truncateStr";
 
 type Props = {
   id: number;
@@ -6,6 +7,7 @@ type Props = {
   handleClickId: (id: number) => void;
   isJanny: boolean;
   handleDelete: (id: number) => void;
+  tripcode: string | null;
 };
 
 export const ReplyTitle = ({
@@ -14,10 +16,13 @@ export const ReplyTitle = ({
   createdAt,
   handleClickId,
   isJanny,
+  tripcode,
 }: Props) => {
   return (
     <div className="mt-1 mb-3 opacity-60">
-      <span>Anonymous </span>
+      <span title={tripcode ?? undefined}>
+        {tripcode ? truncateStr(tripcode, 16) : "Anonymous"}{" "}
+      </span>
       <span className="cursor-pointer" onClick={() => handleClickId(id)}>
         (no. {id}
       </span>

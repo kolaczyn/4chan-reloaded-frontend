@@ -18,6 +18,7 @@ export const ReplyCard = ({
   id,
   createdAt,
   imageUrl,
+  tripcode,
   threadTitle,
   isFirst,
   handleClickId,
@@ -30,6 +31,7 @@ export const ReplyCard = ({
         {imageUrl && <img alt={threadTitle ?? undefined} src={imageUrl} />}
         <div className="px-2 py-1">
           <ReplyTitle
+            tripcode={tripcode}
             id={id}
             handleDelete={handleDelete}
             createdAt={createdAt}
