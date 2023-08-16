@@ -20,6 +20,7 @@ import { RepliesActions } from "~/components/threadsReplies/RepliesActions";
 import { ReplyCard } from "~/components/threadsReplies/ReplyCard";
 import { Loader } from "~/components/ui/Loader";
 import { urlPattern } from "~/utils/urlPattern";
+import { isTripcodeValid } from "~/utils/isTripcodeValid";
 
 type ValidationErrors = {
   message: string | null;
@@ -39,6 +40,7 @@ const addReplyAction = async ({ request, params }: ActionArgs) => {
   const formData = await request.formData();
   const message = formData.get("message") ?? "";
   const imageUrl = formData.get("imageUrl");
+  const tripcode = formData.get("tripcode") ?? "";
 
   let errs: ValidationErrors = {
     message: null,
@@ -64,7 +66,11 @@ const addReplyAction = async ({ request, params }: ActionArgs) => {
     `${API_URL_V1}/${params.boardSlug}/threads/${params.threadId}/replies`,
     {
       method: "post",
-      body: JSON.stringify({ message, ...(imageUrl ? { imageUrl } : {}) }),
+      body: JSON.stringify({
+        message,
+        ...(imageUrl ? { imageUrl } : {}),
+        ...(tripcode ? { tripcode } : {}),
+      }),
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
@@ -123,6 +129,7 @@ const ThreadPage = () => {
   const [messageText, setMessageText] = useState("");
   const [imageUrl, setImageUrl] = useState<string>("");
   const $form = useRef<HTMLFormElement | null>(null);
+  const [tripcode, setTripcode] = useState("");
 
   const isLoading =
     navigation.state === "loading" || revalidator.state === "loading";
@@ -221,6 +228,25 @@ const ThreadPage = () => {
         />
         {actionData?.json?.message && (
           <div className="text-red-400 text-sm">{actionData.json.message}</div>
+        )}
+
+        <label htmlFor="tripcode" className="font-medium mr-2 block mt-2">
+          Tripcode: <span className="text-gray-400 text-sm">(optional)</span>
+        </label>
+        <input
+          value={tripcode}
+          onChange={(e) => setTripcode(e.target.value)}
+          id="tripcode"
+          className="bg-gray-50 my-1 d-block w-full"
+          name="tripcode"
+        />
+        <div className="text-gray-400 text-sm">
+          Tripcode must follow this format: name#password
+        </div>
+        {isTripcodeValid(tripcode) && (
+          <div className="text-gray-400 text-sm mt-1">
+            ✔️ The format is good
+          </div>
         )}
 
         <button

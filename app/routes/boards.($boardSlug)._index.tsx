@@ -29,6 +29,7 @@ import { AppLink } from "~/components/ui/AppLink";
 import { AppLinkExternal } from "~/components/ui/AppLinkExternal";
 import { Loader } from "~/components/ui/Loader";
 import { urlPattern } from "~/utils/urlPattern";
+import { isTripcodeValid } from "~/utils/isTripcodeValid";
 
 const PAGE_SIZE = 24;
 const DEFAULT_SORT: SortOrderDto = "bump";
@@ -133,11 +134,6 @@ const BoardPage = () => {
   const navigation = useNavigation();
   const [imageUrl, setImageUrl] = useState("");
   const [tripcode, setTripcode] = useState("");
-
-  const isTripcodeValid = () => {
-    const [name, password] = tripcode.split("#");
-    return name?.length > 0 && password?.length > 0;
-  };
 
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
@@ -262,7 +258,7 @@ const BoardPage = () => {
             <div className="text-gray-400 text-sm">
               Tripcode must follow this format: name#password
             </div>
-            {isTripcodeValid() && (
+            {isTripcodeValid(tripcode) && (
               <div className="text-gray-400 text-sm mt-1">
                 ✔️ The format is good
               </div>
