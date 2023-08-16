@@ -10,6 +10,11 @@ type ChangelogItem = {
 
 const changelog: ChangelogItem[] = [
   {
+    version: "1.3.0",
+    date: "16.08.2023",
+    changes: "small redesign of /changelog page",
+  },
+  {
     version: "1.2.0",
     date: "15.08.2023",
     changes: "add link for feature requests. Show footer on most pages",
@@ -221,13 +226,24 @@ const ChangelogPage = () => (
       <div className="text-xl">›</div>
       <div>Changelog</div>
     </div>
-    <ul className="list-disc list-inside">
-      {changelog.map((x) => (
-        <li key={x.version}>
-          <b>{x.version}</b>, {x.date.replace(".2023", "")}: {x.changes}
-        </li>
-      ))}
-    </ul>
+    <table className="border border-black">
+      <thead className="bg-gray-50 bg-opacity-40">
+        <tr>
+          <th className="pl-2">Version</th>
+          <th className="px-2">Date</th>
+          <th className="pr-2">Changes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {changelog.map((x) => (
+          <tr key={x.version}>
+            <td className="pl-2">{x.version}</td>
+            <td className="px-2">{x.date.replace(".2023", "")}</td>
+            <td className="pr-2">{x.changes}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </AppContainer>
 );
 
